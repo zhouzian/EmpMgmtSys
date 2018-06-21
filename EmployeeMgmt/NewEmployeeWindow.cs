@@ -1,0 +1,80 @@
+﻿using PersistenceAccess.DataContracts;
+using PersistenceAccess.Entities;
+using PersistenceAccess.View;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace EmployeeMgmt
+{
+	public partial class NewEmployeeWindow : Form
+	{
+		public NewEmployeeWindow()
+		{
+			InitializeComponent();
+			InitializeState();
+		}
+
+		public Guid newEmployeeId;
+		public Title newEmployeeTitle;
+
+		private void InitializeState()
+		{
+			// Bind enum value to dropdowns
+			this.gender.DataSource = Enum.GetValues(typeof(Gender));
+			this.title.DataSource = Enum.GetValues(typeof(Title));
+			this.level.DataSource = Enum.GetValues(typeof(Level));
+			this.manager.DataSource = AppView.GetManagerList();
+			this.manager.DisplayMember = "Name";
+			this.manager.ValueMember = "Id";
+			this.createBtn.Enabled = false;
+		}
+
+		/// <summary>
+		/// Exit
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void cancelBtn_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+
+		/// <summary>
+		/// Create new employee
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void createBtn_Click(object sender, EventArgs e)
+		{
+			Gender newGender;
+			Enum.TryParse<Gender>(this.gender.SelectedValue.ToString(), out newGender);
+			Title newTitle;
+			Enum.TryParse<Title>(this.title.SelectedValue.ToString(), out newTitle);
+			Level newLevel;
+			Enum.TryParse<Level>(this.level.SelectedValue.ToString(), out newLevel);
+			EmployeeDC newEmployee = AppView.CreateEmployee((Guid)this.manager.SelectedValue, this.frstName.Text, this.lastName.Text, newGender, this.email.Text, newTitle, newLevel, this.salary.Value, this.bonus.Value, this.onboard.Value);
+			newEmployeeId = newEmployee.Id;
+			newEmployeeTitle = newEmployee.CurrentTitle;
+			this.Close();
+		}
+
+		private void validate_input(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(this.frstName.Text) || string.IsNullOrWhiteSpace(this.lastName.Text) || string.IsNullOrWhiteSpace(this.email.Text))
+			{
+				this.createBtn.Enabled = false;
+			}
+			else
+			{
+				this.createBtn.Enabled = true;
+			}
+		}
+	}
+}

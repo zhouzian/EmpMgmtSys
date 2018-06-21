@@ -1,0 +1,81 @@
+﻿using LiteDB;
+using PersistenceAccess.Entities;
+using PersistenceAccess.Factories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace PersistenceAccess.DataContracts
+{
+	public class EmployeeDC : Employee
+	{
+		private EmployeeDC() { }
+
+		public EmployeeDC(Employee emp, LiteDatabase db)
+		{
+			if (emp.Id == Guid.Empty)
+			{
+				throw new Exception("Employee must be already persisted in db.");
+			}
+
+			// copy Employee properties
+			Id = emp.Id;
+			FirstName = emp.FirstName;
+			LastName = emp.LastName;
+			Gender = emp.Gender;
+			Email = emp.Email;
+			OnboardDate = emp.OnboardDate;
+
+			// populate full history
+			var histories = Persistence.GetHistoryStore(db).Find(Query.EQ("employee_id", Id)).OrderBy(his => his.Date);
+			var HistoryList = new List<StatusChangeHistoryDC>();
+			foreach(var his in histories)
+			{
+				HistoryList.Add(new StatusChangeHistoryDC(his, db));
+			}
+			History = HistoryList;
+
+			// find most recent properties including title, level, salary and manager
+			Guid managerId = History.OrderBy(his => his.Date).Last().ManagerId;
+			CurrentManager = managerId == Guid.Empty ?  new Employee() { Id = Guid.Empty } : Persistence.GetEmployeeStore(db).FindById(managerId);
+			CurrentTitle = History.OrderBy(his => his.Date).Last().Title;
+			CurrentLevel = History.OrderBy(his => his.Date).Last().Level;
+			CurrentSalary = History.OrderBy(his => his.Date).Last().Salary;
+			ResignDate = History.LastOrDefault(his => his.Action == ActionType.RESIGN)?.Date;
+		}
+
+		public Employee CurrentManager { get; private set; }
+
+		public Title CurrentTitle { get; private set; }
+
+		public Level CurrentLevel { get; private set; }
+
+		public Decimal CurrentSalary { get; private set; }
+
+		public DateTime? ResignDate { get; private set; }
+
+		public IEnumerable<StatusChangeHistoryDC> History { get; private set; }
+
+		public string ManagerName {
+			get
+			{
+				if (CurrentManager.Id == Guid.Empty)
+				{
+					return string.Empty;
+				}
+				else
+				{
+					return CurrentManager.FirstName + " " + CurrentManager.LastName;
+				}
+			}
+		}
+
+		public string SelfName
+		{
+			get
+			{
+				return FirstName + " " + LastName;
+			}
+		}
+	}
+}
