@@ -24,6 +24,7 @@ namespace EmployeeMgmt
 			this.showDev.Checked = true;
 			this.showQa.Checked = true;
 			this.showTpm.Checked = true;
+			this.showUe.Checked = true;
 			UpdateMainListing();
 
 			// Bind enum value to dropdowns
