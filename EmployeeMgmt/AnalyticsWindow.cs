@@ -28,6 +28,7 @@ namespace EmployeeMgmt
 			PopulateDEVSection(result);
 			PopulateQASection(result);
 			PopulateTPMSection(result);
+			PopulateUESection(result);
 		}
 
 		private void PopulateOverallSection(AnalyticsDC result)
@@ -97,6 +98,26 @@ namespace EmployeeMgmt
 			this.tpmTotalValue.Text = result.TPMStatistic.Total.ToString("C0");
 			this.tpmMaxValue.Text = result.TPMStatistic.Max.ToString("C0");
 			this.tpmMinValue.Text = result.TPMStatistic.Min.ToString("C0");
+		}
+
+		private void PopulateUESection(AnalyticsDC result)
+		{
+			string[] x = new string[] { "None: " + result.UEStatistic.None_Count,
+				"I: " + result.UEStatistic.I_Count,
+				"II: " + result.UEStatistic.II_Count,
+				"III: " + result.UEStatistic.III_Count,
+				"Senior: " + result.UEStatistic.Senior_Count,
+				"Staff: " + result.UEStatistic.Staff_Count,
+				"Principle: " + result.UEStatistic.Principle_Count };
+			int[] y = new int[] { result.UEStatistic.None_Count, result.UEStatistic.I_Count, result.UEStatistic.II_Count, result.UEStatistic.III_Count, result.UEStatistic.Senior_Count, result.UEStatistic.Staff_Count, result.UEStatistic.Principle_Count };
+			this.uePie.Series[0].Points.DataBindXY(x, y);
+			this.uePie.Series[0]["PieLabelStyle"] = "Disabled";
+
+			this.ueCountValue.Text = result.UEStatistic.Count.ToString();
+			this.ueAverageValue.Text = result.UEStatistic.Average.ToString("C0");
+			this.ueTotalValue.Text = result.UEStatistic.Total.ToString("C0");
+			this.ueMaxValue.Text = result.UEStatistic.Max.ToString("C0");
+			this.ueMinValue.Text = result.UEStatistic.Min.ToString("C0");
 		}
 	}
 }

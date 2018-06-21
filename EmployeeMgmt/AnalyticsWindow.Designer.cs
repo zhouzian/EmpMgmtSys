@@ -37,6 +37,9 @@
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
 			System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.overallContainer = new System.Windows.Forms.GroupBox();
 			this.allMinValue = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
@@ -87,6 +90,19 @@
 			this.label30 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.tpmPie = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.ueMinValue = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.ueMaxValue = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.ueAverageValue = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
+			this.ueTotalValue = new System.Windows.Forms.Label();
+			this.label25 = new System.Windows.Forms.Label();
+			this.ueCountValue = new System.Windows.Forms.Label();
+			this.label29 = new System.Windows.Forms.Label();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.uePie = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.overallContainer.SuspendLayout();
 			this.devContainer.SuspendLayout();
 			this.devLevel.SuspendLayout();
@@ -97,6 +113,9 @@
 			this.tpmContainer.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tpmPie)).BeginInit();
+			this.groupBox3.SuspendLayout();
+			this.groupBox4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.uePie)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// overallContainer
@@ -113,7 +132,7 @@
 			this.overallContainer.Controls.Add(this.label1);
 			this.overallContainer.Location = new System.Drawing.Point(13, 373);
 			this.overallContainer.Name = "overallContainer";
-			this.overallContainer.Size = new System.Drawing.Size(775, 65);
+			this.overallContainer.Size = new System.Drawing.Size(1035, 65);
 			this.overallContainer.TabIndex = 0;
 			this.overallContainer.TabStop = false;
 			this.overallContainer.Text = "Overall Analytics";
@@ -326,7 +345,7 @@
 			this.devLevel.Size = new System.Drawing.Size(232, 154);
 			this.devLevel.TabIndex = 2;
 			this.devLevel.TabStop = false;
-			this.devLevel.Text = "Level distribution";
+			this.devLevel.Text = "Levels";
 			// 
 			// devPie
 			// 
@@ -347,7 +366,7 @@
 			series1.Legend = "Legend1";
 			series1.Name = "Series1";
 			series1.SmartLabelStyle.Enabled = false;
-			series1.ToolTip = "Number of QAs level #VALX";
+			series1.ToolTip = "Number of DEVs level #VALX";
 			this.devPie.Series.Add(series1);
 			this.devPie.Size = new System.Drawing.Size(220, 129);
 			this.devPie.TabIndex = 0;
@@ -368,7 +387,7 @@
 			this.qaContainer.Controls.Add(this.groupBox1);
 			this.qaContainer.Location = new System.Drawing.Point(267, 12);
 			this.qaContainer.Name = "qaContainer";
-			this.qaContainer.Size = new System.Drawing.Size(261, 354);
+			this.qaContainer.Size = new System.Drawing.Size(248, 354);
 			this.qaContainer.TabIndex = 2;
 			this.qaContainer.TabStop = false;
 			this.qaContainer.Text = "QA";
@@ -468,10 +487,10 @@
 			this.groupBox1.Controls.Add(this.qaPie);
 			this.groupBox1.Location = new System.Drawing.Point(6, 21);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(249, 154);
+			this.groupBox1.Size = new System.Drawing.Size(236, 154);
 			this.groupBox1.TabIndex = 3;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Level distribution";
+			this.groupBox1.Text = "Levels";
 			// 
 			// qaPie
 			// 
@@ -513,7 +532,7 @@
 			this.tpmContainer.Controls.Add(this.groupBox2);
 			this.tpmContainer.Location = new System.Drawing.Point(534, 13);
 			this.tpmContainer.Name = "tpmContainer";
-			this.tpmContainer.Size = new System.Drawing.Size(254, 354);
+			this.tpmContainer.Size = new System.Drawing.Size(248, 354);
 			this.tpmContainer.TabIndex = 3;
 			this.tpmContainer.TabStop = false;
 			this.tpmContainer.Text = "Technical Product Manager";
@@ -613,10 +632,10 @@
 			this.groupBox2.Controls.Add(this.tpmPie);
 			this.groupBox2.Location = new System.Drawing.Point(6, 20);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(242, 154);
+			this.groupBox2.Size = new System.Drawing.Size(236, 154);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Level distribution";
+			this.groupBox2.Text = "Levels";
 			// 
 			// tpmPie
 			// 
@@ -643,11 +662,157 @@
 			this.tpmPie.TabIndex = 0;
 			this.tpmPie.Text = "Title";
 			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.ueMinValue);
+			this.groupBox3.Controls.Add(this.label10);
+			this.groupBox3.Controls.Add(this.ueMaxValue);
+			this.groupBox3.Controls.Add(this.label17);
+			this.groupBox3.Controls.Add(this.ueAverageValue);
+			this.groupBox3.Controls.Add(this.label21);
+			this.groupBox3.Controls.Add(this.ueTotalValue);
+			this.groupBox3.Controls.Add(this.label25);
+			this.groupBox3.Controls.Add(this.ueCountValue);
+			this.groupBox3.Controls.Add(this.label29);
+			this.groupBox3.Controls.Add(this.groupBox4);
+			this.groupBox3.Location = new System.Drawing.Point(794, 13);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(248, 354);
+			this.groupBox3.TabIndex = 4;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Technical Writer";
+			// 
+			// ueMinValue
+			// 
+			this.ueMinValue.AutoSize = true;
+			this.ueMinValue.Location = new System.Drawing.Point(165, 318);
+			this.ueMinValue.Name = "ueMinValue";
+			this.ueMinValue.Size = new System.Drawing.Size(35, 13);
+			this.ueMinValue.TabIndex = 22;
+			this.ueMinValue.Text = "label2";
+			// 
+			// label10
+			// 
+			this.label10.AutoSize = true;
+			this.label10.Location = new System.Drawing.Point(27, 318);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(27, 13);
+			this.label10.TabIndex = 21;
+			this.label10.Text = "Min:";
+			// 
+			// ueMaxValue
+			// 
+			this.ueMaxValue.AutoSize = true;
+			this.ueMaxValue.Location = new System.Drawing.Point(165, 287);
+			this.ueMaxValue.Name = "ueMaxValue";
+			this.ueMaxValue.Size = new System.Drawing.Size(35, 13);
+			this.ueMaxValue.TabIndex = 20;
+			this.ueMaxValue.Text = "label2";
+			// 
+			// label17
+			// 
+			this.label17.AutoSize = true;
+			this.label17.Location = new System.Drawing.Point(27, 287);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(30, 13);
+			this.label17.TabIndex = 19;
+			this.label17.Text = "Max:";
+			// 
+			// ueAverageValue
+			// 
+			this.ueAverageValue.AutoSize = true;
+			this.ueAverageValue.Location = new System.Drawing.Point(165, 253);
+			this.ueAverageValue.Name = "ueAverageValue";
+			this.ueAverageValue.Size = new System.Drawing.Size(35, 13);
+			this.ueAverageValue.TabIndex = 18;
+			this.ueAverageValue.Text = "label2";
+			// 
+			// label21
+			// 
+			this.label21.AutoSize = true;
+			this.label21.Location = new System.Drawing.Point(27, 253);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(50, 13);
+			this.label21.TabIndex = 17;
+			this.label21.Text = "Average:";
+			// 
+			// ueTotalValue
+			// 
+			this.ueTotalValue.AutoSize = true;
+			this.ueTotalValue.Location = new System.Drawing.Point(165, 220);
+			this.ueTotalValue.Name = "ueTotalValue";
+			this.ueTotalValue.Size = new System.Drawing.Size(35, 13);
+			this.ueTotalValue.TabIndex = 16;
+			this.ueTotalValue.Text = "label2";
+			// 
+			// label25
+			// 
+			this.label25.AutoSize = true;
+			this.label25.Location = new System.Drawing.Point(27, 220);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(65, 13);
+			this.label25.TabIndex = 15;
+			this.label25.Text = "Total (CAD):";
+			// 
+			// ueCountValue
+			// 
+			this.ueCountValue.AutoSize = true;
+			this.ueCountValue.Location = new System.Drawing.Point(165, 189);
+			this.ueCountValue.Name = "ueCountValue";
+			this.ueCountValue.Size = new System.Drawing.Size(35, 13);
+			this.ueCountValue.TabIndex = 14;
+			this.ueCountValue.Text = "label2";
+			// 
+			// label29
+			// 
+			this.label29.AutoSize = true;
+			this.label29.Location = new System.Drawing.Point(27, 189);
+			this.label29.Name = "label29";
+			this.label29.Size = new System.Drawing.Size(38, 13);
+			this.label29.TabIndex = 13;
+			this.label29.Text = "Count:";
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.uePie);
+			this.groupBox4.Location = new System.Drawing.Point(6, 20);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(236, 154);
+			this.groupBox4.TabIndex = 3;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Levels";
+			// 
+			// uePie
+			// 
+			this.uePie.BackColor = System.Drawing.Color.Transparent;
+			this.uePie.BorderlineColor = System.Drawing.Color.Transparent;
+			this.uePie.BorderSkin.PageColor = System.Drawing.Color.Transparent;
+			chartArea4.BackColor = System.Drawing.Color.Transparent;
+			chartArea4.BackSecondaryColor = System.Drawing.Color.Transparent;
+			chartArea4.Name = "ChartArea1";
+			this.uePie.ChartAreas.Add(chartArea4);
+			legend4.BackColor = System.Drawing.Color.Transparent;
+			legend4.Name = "Legend1";
+			this.uePie.Legends.Add(legend4);
+			this.uePie.Location = new System.Drawing.Point(6, 19);
+			this.uePie.Name = "uePie";
+			series4.ChartArea = "ChartArea1";
+			series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
+			series4.Legend = "Legend1";
+			series4.Name = "Series1";
+			series4.SmartLabelStyle.Enabled = false;
+			series4.ToolTip = "Number of UEs level #VALX";
+			this.uePie.Series.Add(series4);
+			this.uePie.Size = new System.Drawing.Size(220, 129);
+			this.uePie.TabIndex = 0;
+			this.uePie.Text = "Title";
+			// 
 			// AnalyticsWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.ClientSize = new System.Drawing.Size(1057, 450);
+			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.tpmContainer);
 			this.Controls.Add(this.qaContainer);
 			this.Controls.Add(this.devContainer);
@@ -668,6 +833,10 @@
 			this.tpmContainer.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.tpmPie)).EndInit();
+			this.groupBox3.ResumeLayout(false);
+			this.groupBox3.PerformLayout();
+			this.groupBox4.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.uePie)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -724,5 +893,18 @@
 		private System.Windows.Forms.Label label28;
 		private System.Windows.Forms.Label tpmCountValue;
 		private System.Windows.Forms.Label label30;
+		private System.Windows.Forms.GroupBox groupBox3;
+		private System.Windows.Forms.Label ueMinValue;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label ueMaxValue;
+		private System.Windows.Forms.Label label17;
+		private System.Windows.Forms.Label ueAverageValue;
+		private System.Windows.Forms.Label label21;
+		private System.Windows.Forms.Label ueTotalValue;
+		private System.Windows.Forms.Label label25;
+		private System.Windows.Forms.Label ueCountValue;
+		private System.Windows.Forms.Label label29;
+		private System.Windows.Forms.GroupBox groupBox4;
+		private System.Windows.Forms.DataVisualization.Charting.Chart uePie;
 	}
 }

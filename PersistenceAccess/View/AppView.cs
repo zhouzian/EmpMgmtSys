@@ -169,6 +169,7 @@ namespace PersistenceAccess.View
 				ret.DEVStatistic = GetStatisticByTitle("DEV", source);
 				ret.QAStatistic = GetStatisticByTitle("QA", source);
 				ret.TPMStatistic = GetStatisticByTitle("TPM", source);
+				ret.UEStatistic = GetStatisticByTitle("UE", source);
 
 				return ret;
 			}
@@ -188,6 +189,9 @@ namespace PersistenceAccess.View
 					break;
 				case "TPM":
 					condition = emp => emp.CurrentTitle == Title.TECHNICAL_PRODUCT_MANAGER;
+					break;
+				case "UE":
+					condition = emp => emp.CurrentTitle == Title.TECHNICAL_WRITER;
 					break;
 				default:
 					condition = emp => true;

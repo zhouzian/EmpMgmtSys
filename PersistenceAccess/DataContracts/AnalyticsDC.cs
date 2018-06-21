@@ -15,6 +15,8 @@ namespace PersistenceAccess.DataContracts
 		public LevelStatisticDC QAStatistic { get; set; }
 
 		public LevelStatisticDC TPMStatistic { get; set; }
+
+		public LevelStatisticDC UEStatistic { get; set; }
 	}
 
 	public class StatisticDC
