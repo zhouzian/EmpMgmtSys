@@ -233,7 +233,8 @@ namespace EmployeeMgmt
 				{
 					ensureChecked(newEmpDlg.newEmployeeTitle);
 					updateMainListing();
-					selectEmployee(newEmpDlg.newEmployeeId.ToString());
+					Guid tmp = newEmpDlg.newEmployeeId;
+					selectEmployee(tmp.ToString());
 				}
 			}
 		}
@@ -256,7 +257,8 @@ namespace EmployeeMgmt
 				{
 					ensureChecked(newHistoryDlg.currentEmployeeTitle);
 					updateMainListing();
-					selectEmployee(newHistoryDlg.currentEmployeeId.ToString());
+					Guid tmp = newHistoryDlg.currentEmployeeId;
+					selectEmployee(tmp.ToString());
 				}
 			}
 		}
