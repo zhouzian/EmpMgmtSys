@@ -71,6 +71,7 @@ namespace EmployeeMgmt
 			this.showDev = new System.Windows.Forms.CheckBox();
 			this.showQa = new System.Windows.Forms.CheckBox();
 			this.showTpm = new System.Windows.Forms.CheckBox();
+			this.showUe = new System.Windows.Forms.CheckBox();
 			Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			Email = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			Onboard = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -200,7 +201,7 @@ namespace EmployeeMgmt
 			this.employeeListContainer.TabIndex = 0;
 			this.employeeListContainer.UseCompatibleStateImageBehavior = false;
 			this.employeeListContainer.View = System.Windows.Forms.View.Details;
-			this.employeeListContainer.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.employeeListContainer_ItemSelectionChanged);
+			this.employeeListContainer.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.CurrentEmployeeSelectionChangedHandler);
 			// 
 			// generalInfoContainer
 			// 
@@ -282,7 +283,7 @@ namespace EmployeeMgmt
 			this.saveBtn.TabIndex = 18;
 			this.saveBtn.Text = "Save";
 			this.saveBtn.UseVisualStyleBackColor = true;
-			this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
+			this.saveBtn.Click += new System.EventHandler(this.GeneralInfoSaveBtnClickedHandler);
 			// 
 			// revertBtn
 			// 
@@ -292,7 +293,7 @@ namespace EmployeeMgmt
 			this.revertBtn.TabIndex = 17;
 			this.revertBtn.Text = "Revert";
 			this.revertBtn.UseVisualStyleBackColor = true;
-			this.revertBtn.Click += new System.EventHandler(this.revertBtn_Click);
+			this.revertBtn.Click += new System.EventHandler(this.GeneralInfoRevertBtnClickedHandler);
 			// 
 			// gOnboard
 			// 
@@ -300,7 +301,7 @@ namespace EmployeeMgmt
 			this.gOnboard.Name = "gOnboard";
 			this.gOnboard.Size = new System.Drawing.Size(228, 20);
 			this.gOnboard.TabIndex = 9;
-			this.gOnboard.ValueChanged += new System.EventHandler(this.gOnboard_ValueChanged);
+			this.gOnboard.ValueChanged += new System.EventHandler(this.OnboardDateModifiedHandler);
 			// 
 			// gEmail
 			// 
@@ -308,7 +309,7 @@ namespace EmployeeMgmt
 			this.gEmail.Name = "gEmail";
 			this.gEmail.Size = new System.Drawing.Size(273, 20);
 			this.gEmail.TabIndex = 7;
-			this.gEmail.ModifiedChanged += new System.EventHandler(this.gEmail_ModifiedChanged);
+			this.gEmail.ModifiedChanged += new System.EventHandler(this.EmailModifiedHandler);
 			// 
 			// gGender
 			// 
@@ -318,7 +319,7 @@ namespace EmployeeMgmt
 			this.gGender.Name = "gGender";
 			this.gGender.Size = new System.Drawing.Size(80, 21);
 			this.gGender.TabIndex = 5;
-			this.gGender.SelectionChangeCommitted += new System.EventHandler(this.gGender_SelectionChangeCommitted);
+			this.gGender.SelectionChangeCommitted += new System.EventHandler(this.GenderModifiedHandler);
 			// 
 			// gLastName
 			// 
@@ -326,7 +327,7 @@ namespace EmployeeMgmt
 			this.gLastName.Name = "gLastName";
 			this.gLastName.Size = new System.Drawing.Size(100, 20);
 			this.gLastName.TabIndex = 3;
-			this.gLastName.ModifiedChanged += new System.EventHandler(this.gLastName_ModifiedChanged);
+			this.gLastName.ModifiedChanged += new System.EventHandler(this.LastNameModifiedHander);
 			// 
 			// gFirstName
 			// 
@@ -334,7 +335,7 @@ namespace EmployeeMgmt
 			this.gFirstName.Name = "gFirstName";
 			this.gFirstName.Size = new System.Drawing.Size(100, 20);
 			this.gFirstName.TabIndex = 1;
-			this.gFirstName.ModifiedChanged += new System.EventHandler(this.gFirstName_ModifiedChanged);
+			this.gFirstName.ModifiedChanged += new System.EventHandler(this.FirstNameModifiedHandler);
 			// 
 			// newEmpBtn
 			// 
@@ -344,7 +345,7 @@ namespace EmployeeMgmt
 			this.newEmpBtn.TabIndex = 2;
 			this.newEmpBtn.Text = "+ New employee";
 			this.newEmpBtn.UseVisualStyleBackColor = true;
-			this.newEmpBtn.Click += new System.EventHandler(this.newEmpBtn_Click);
+			this.newEmpBtn.Click += new System.EventHandler(this.NewEmployeeBtnClickedHandler);
 			// 
 			// historyInfoContainer
 			// 
@@ -365,7 +366,7 @@ namespace EmployeeMgmt
 			this.createHistoryBtn.TabIndex = 3;
 			this.createHistoryBtn.Text = "+ New history";
 			this.createHistoryBtn.UseVisualStyleBackColor = true;
-			this.createHistoryBtn.Click += new System.EventHandler(this.createHistoryBtn_Click);
+			this.createHistoryBtn.Click += new System.EventHandler(this.CreateHistoryBtnClickedHandler);
 			// 
 			// historyListContainer
 			// 
@@ -429,7 +430,7 @@ namespace EmployeeMgmt
 			this.accessAnalyticsBtn.TabIndex = 4;
 			this.accessAnalyticsBtn.Text = "View Analytics";
 			this.accessAnalyticsBtn.UseVisualStyleBackColor = true;
-			this.accessAnalyticsBtn.Click += new System.EventHandler(this.accessAnalyticsBtn_Click);
+			this.accessAnalyticsBtn.Click += new System.EventHandler(this.AnalyticsBtnClickedHandler);
 			// 
 			// showDev
 			// 
@@ -440,7 +441,7 @@ namespace EmployeeMgmt
 			this.showDev.TabIndex = 5;
 			this.showDev.Text = "DEV";
 			this.showDev.UseVisualStyleBackColor = true;
-			this.showDev.CheckedChanged += new System.EventHandler(this.showDev_CheckedChanged);
+			this.showDev.CheckedChanged += new System.EventHandler(this.CatelogChangedHandler);
 			// 
 			// showQa
 			// 
@@ -451,7 +452,7 @@ namespace EmployeeMgmt
 			this.showQa.TabIndex = 6;
 			this.showQa.Text = "QA";
 			this.showQa.UseVisualStyleBackColor = true;
-			this.showQa.CheckedChanged += new System.EventHandler(this.showDev_CheckedChanged);
+			this.showQa.CheckedChanged += new System.EventHandler(this.CatelogChangedHandler);
 			// 
 			// showTpm
 			// 
@@ -462,13 +463,25 @@ namespace EmployeeMgmt
 			this.showTpm.TabIndex = 7;
 			this.showTpm.Text = "TPM";
 			this.showTpm.UseVisualStyleBackColor = true;
-			this.showTpm.CheckedChanged += new System.EventHandler(this.showDev_CheckedChanged);
+			this.showTpm.CheckedChanged += new System.EventHandler(this.CatelogChangedHandler);
+			// 
+			// showUe
+			// 
+			this.showUe.AutoSize = true;
+			this.showUe.Location = new System.Drawing.Point(272, 13);
+			this.showUe.Name = "showUe";
+			this.showUe.Size = new System.Drawing.Size(41, 17);
+			this.showUe.TabIndex = 8;
+			this.showUe.Text = "UE";
+			this.showUe.UseVisualStyleBackColor = true;
+			this.showUe.CheckedChanged += new System.EventHandler(this.CatelogChangedHandler);
 			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1310, 761);
+			this.Controls.Add(this.showUe);
 			this.Controls.Add(this.showTpm);
 			this.Controls.Add(this.showQa);
 			this.Controls.Add(this.showDev);
@@ -519,6 +532,7 @@ namespace EmployeeMgmt
 		private System.Windows.Forms.CheckBox showDev;
 		private System.Windows.Forms.CheckBox showQa;
 		private System.Windows.Forms.CheckBox showTpm;
+		private System.Windows.Forms.CheckBox showUe;
 	}
 }
 

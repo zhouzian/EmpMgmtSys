@@ -3,6 +3,7 @@ using PersistenceAccess.Entities;
 using PersistenceAccess.View;
 using System;
 using System.Windows.Forms;
+using static PersistenceAccess.View.AppView;
 
 namespace EmployeeMgmt
 {
@@ -23,7 +24,7 @@ namespace EmployeeMgmt
 			this.showDev.Checked = true;
 			this.showQa.Checked = true;
 			this.showTpm.Checked = true;
-			updateMainListing();
+			UpdateMainListing();
 
 			// Bind enum value to dropdowns
 			this.gGender.DataSource = Enum.GetValues(typeof(Gender));
@@ -35,18 +36,18 @@ namespace EmployeeMgmt
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void employeeListContainer_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+		private void CurrentEmployeeSelectionChangedHandler(object sender, ListViewItemSelectionChangedEventArgs e)
 		{
-			unlockGeneralInfoSection();
+			UnlockGeneralInfoSection();
 			Guid id = (Guid)e.Item.Tag;
 			EmployeeDC emp = AppView.GetEmployee((Guid)id);
-			populateGeneralInfoSection(emp);
-			populateHistorySection(emp);
-			disableGeneralInfoBtns();
-			unlockHistory();
+			PopulateGeneralInfoSection(emp);
+			PopulateHistorySection(emp);
+			DisableGeneralInfoBtns();
+			UnlockHistory();
 		}
 
-		private void populateGeneralInfoSection(EmployeeDC emp)
+		private void PopulateGeneralInfoSection(EmployeeDC emp)
 		{
 			this.gFirstName.Text = emp.FirstName;
 			this.gFirstName.Modified = false;
@@ -70,7 +71,7 @@ namespace EmployeeMgmt
 			}
 		}
 
-		private void populateHistorySection(EmployeeDC emp)
+		private void PopulateHistorySection(EmployeeDC emp)
 		{
 			this.historyListContainer.Items.Clear();
 			this.historyListContainer.Items.AddRange(AppView.GetHistoryFromEmployeeView(emp));
@@ -82,12 +83,12 @@ namespace EmployeeMgmt
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void revertBtn_Click(object sender, EventArgs e)
+		private void GeneralInfoRevertBtnClickedHandler(object sender, EventArgs e)
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 			EmployeeDC emp = AppView.GetEmployee(id);
-			populateGeneralInfoSection(emp);
-			disableGeneralInfoBtns();
+			PopulateGeneralInfoSection(emp);
+			DisableGeneralInfoBtns();
 		}
 
 		/// <summary>
@@ -95,68 +96,72 @@ namespace EmployeeMgmt
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void saveBtn_Click(object sender, EventArgs e)
+		private void GeneralInfoSaveBtnClickedHandler(object sender, EventArgs e)
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 			Gender gender;
 			Enum.TryParse<Gender>(this.gGender.SelectedValue.ToString(), out gender);
 			AppView.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
-			updateMainListing();
+			UpdateMainListing();
 		}
 
-		private void updateMainListing()
+		private void UpdateMainListing()
 		{
-			bool showDev = this.showDev.Checked;
-			bool showQa = this.showQa.Checked;
-			bool showTpm = this.showTpm.Checked;
+			var visibParam = new VisibilityParam()
+			{
+				showDev = this.showDev.Checked,
+				showQa = this.showQa.Checked,
+				showTpm = this.showTpm.Checked,
+				showUe = this.showUe.Checked
+			};
 
 			if (this.employeeListContainer.FocusedItem != null)
 			{
 				int selectedIndex = this.employeeListContainer.FocusedItem.Index;
 				Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 				this.employeeListContainer.Items.Clear();
-				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(showDev, showQa, showTpm));
+				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(visibParam));
 				if (selectedIndex <= this.employeeListContainer.Items.Count - 1 && (Guid)this.employeeListContainer.Items[selectedIndex].Tag == id)
 				{
 					// to make sure we are still focusing at the same item
 					this.employeeListContainer.Items[selectedIndex].Focused = true;
 					this.employeeListContainer.Items[selectedIndex].Selected = true;
 					this.employeeListContainer.Items[selectedIndex].EnsureVisible();
-					disableGeneralInfoBtns();
+					DisableGeneralInfoBtns();
 				}
 				else
 				{
 					// the original item wasn't there anymore
-					lockGeneralInfoSection();
-					disableGeneralInfoBtns();
-					lockHistory();
+					LockGeneralInfoSection();
+					DisableGeneralInfoBtns();
+					LockHistory();
 				}
 			}
 			else
 			{
 				this.employeeListContainer.Items.Clear();
-				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(showDev, showQa, showTpm));
-				lockGeneralInfoSection();
-				disableGeneralInfoBtns();
-				lockHistory();
+				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(visibParam));
+				LockGeneralInfoSection();
+				DisableGeneralInfoBtns();
+				LockHistory();
 			}
 		}
 
 		#region General Info section event handling
 
-		private void enableGeneralInfoBtns()
+		private void EnableGeneralInfoBtns()
 		{
 			this.revertBtn.Enabled = true;
 			this.saveBtn.Enabled = true;
 		}
 
-		private void disableGeneralInfoBtns()
+		private void DisableGeneralInfoBtns()
 		{
 			this.revertBtn.Enabled = false;
 			this.saveBtn.Enabled = false;
 		}
 
-		private void lockGeneralInfoSection()
+		private void LockGeneralInfoSection()
 		{
 			this.gFirstName.Text = string.Empty;
 			this.gFirstName.Enabled = false;
@@ -173,7 +178,7 @@ namespace EmployeeMgmt
 			this.resignInfo.Text = string.Empty;
 		}
 
-		private void unlockGeneralInfoSection()
+		private void UnlockGeneralInfoSection()
 		{
 			this.gFirstName.Enabled = true;
 			this.gLastName.Enabled = true;
@@ -182,40 +187,40 @@ namespace EmployeeMgmt
 			this.gOnboard.Enabled = true;
 		}
 
-		private void lockHistory()
+		private void LockHistory()
 		{
 			this.createHistoryBtn.Enabled = false;
 			this.historyListContainer.Items.Clear();
 		}
 
-		private void unlockHistory()
+		private void UnlockHistory()
 		{
 			this.createHistoryBtn.Enabled = true;
 		}
 
-		private void gFirstName_ModifiedChanged(object sender, EventArgs e)
+		private void FirstNameModifiedHandler(object sender, EventArgs e)
 		{
-			enableGeneralInfoBtns();
+			EnableGeneralInfoBtns();
 		}
 
-		private void gLastName_ModifiedChanged(object sender, EventArgs e)
+		private void LastNameModifiedHander(object sender, EventArgs e)
 		{
-			enableGeneralInfoBtns();
+			EnableGeneralInfoBtns();
 		}
 
-		private void gEmail_ModifiedChanged(object sender, EventArgs e)
+		private void EmailModifiedHandler(object sender, EventArgs e)
 		{
-			enableGeneralInfoBtns();
+			EnableGeneralInfoBtns();
 		}
 
-		private void gGender_SelectionChangeCommitted(object sender, EventArgs e)
+		private void GenderModifiedHandler(object sender, EventArgs e)
 		{
-			enableGeneralInfoBtns();
+			EnableGeneralInfoBtns();
 		}
 
-		private void gOnboard_ValueChanged(object sender, EventArgs e)
+		private void OnboardDateModifiedHandler(object sender, EventArgs e)
 		{
-			enableGeneralInfoBtns();
+			EnableGeneralInfoBtns();
 		}
 
 		#endregion
@@ -225,21 +230,21 @@ namespace EmployeeMgmt
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void newEmpBtn_Click(object sender, EventArgs e)
+		private void NewEmployeeBtnClickedHandler(object sender, EventArgs e)
 		{
 			using (var newEmpDlg = new NewEmployeeWindow())
 			{
 				if (newEmpDlg.ShowDialog() == DialogResult.OK)
 				{
-					ensureChecked(newEmpDlg.newEmployeeTitle);
-					updateMainListing();
+					EnsureChecked(newEmpDlg.newEmployeeTitle);
+					UpdateMainListing();
 					Guid tmp = newEmpDlg.newEmployeeId;
-					selectEmployee(tmp.ToString());
+					SelectEmployee(tmp.ToString());
 				}
 			}
 		}
 
-		private void selectEmployee(string id)
+		private void SelectEmployee(string id)
 		{
 			var newItem = this.employeeListContainer.Items.Find(id, false)[0];
 			newItem.Selected = true;
@@ -247,7 +252,7 @@ namespace EmployeeMgmt
 			newItem.EnsureVisible();
 		}
 
-		private void createHistoryBtn_Click(object sender, EventArgs e)
+		private void CreateHistoryBtnClickedHandler(object sender, EventArgs e)
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 			EmployeeDC emp = AppView.GetEmployee((Guid)id);
@@ -255,15 +260,15 @@ namespace EmployeeMgmt
 			{
 				if (newHistoryDlg.ShowDialog() == DialogResult.OK)
 				{
-					ensureChecked(newHistoryDlg.currentEmployeeTitle);
-					updateMainListing();
+					EnsureChecked(newHistoryDlg.currentEmployeeTitle);
+					UpdateMainListing();
 					Guid tmp = newHistoryDlg.currentEmployeeId;
-					selectEmployee(tmp.ToString());
+					SelectEmployee(tmp.ToString());
 				}
 			}
 		}
 
-		private void accessAnalyticsBtn_Click(object sender, EventArgs e)
+		private void AnalyticsBtnClickedHandler(object sender, EventArgs e)
 		{
 			using (var analyticsDlg = new AnalyticsWindow())
 			{
@@ -271,12 +276,12 @@ namespace EmployeeMgmt
 			}
 		}
 
-		private void showDev_CheckedChanged(object sender, EventArgs e)
+		private void CatelogChangedHandler(object sender, EventArgs e)
 		{
-			updateMainListing();
+			UpdateMainListing();
 		}
 
-		private void ensureChecked(Title title)
+		private void EnsureChecked(Title title)
 		{
 			switch (title)
 			{
@@ -291,6 +296,9 @@ namespace EmployeeMgmt
 					break;
 				case Title.TECHNICAL_PRODUCT_MANAGER:
 					this.showTpm.Checked = true;
+					break;
+				case Title.TECHNICAL_WRITER:
+					this.showUe.Checked = true;
 					break;
 			}
 		}

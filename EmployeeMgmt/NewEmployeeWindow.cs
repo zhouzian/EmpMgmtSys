@@ -41,7 +41,7 @@ namespace EmployeeMgmt
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void cancelBtn_Click(object sender, EventArgs e)
+		private void CancelBtnClickedHandler(object sender, EventArgs e)
 		{
 			this.Close();
 		}
@@ -51,7 +51,7 @@ namespace EmployeeMgmt
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void createBtn_Click(object sender, EventArgs e)
+		private void CreateBtnClickedHandler(object sender, EventArgs e)
 		{
 			Gender newGender;
 			Enum.TryParse<Gender>(this.gender.SelectedValue.ToString(), out newGender);
@@ -65,7 +65,7 @@ namespace EmployeeMgmt
 			this.Close();
 		}
 
-		private void validate_input(object sender, EventArgs e)
+		private void InputValidationEvtHandler(object sender, EventArgs e)
 		{
 			if (string.IsNullOrWhiteSpace(this.frstName.Text) || string.IsNullOrWhiteSpace(this.lastName.Text) || string.IsNullOrWhiteSpace(this.email.Text))
 			{

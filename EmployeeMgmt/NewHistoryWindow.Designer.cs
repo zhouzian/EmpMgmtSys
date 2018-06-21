@@ -199,7 +199,7 @@
 			this.createBtn.TabIndex = 43;
 			this.createBtn.Text = "Create";
 			this.createBtn.UseVisualStyleBackColor = true;
-			this.createBtn.Click += new System.EventHandler(this.createBtn_Click);
+			this.createBtn.Click += new System.EventHandler(this.CreateBtnClickedHandler);
 			// 
 			// cancelBtn
 			// 
@@ -210,7 +210,7 @@
 			this.cancelBtn.TabIndex = 42;
 			this.cancelBtn.Text = "Cancel";
 			this.cancelBtn.UseVisualStyleBackColor = true;
-			this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+			this.cancelBtn.Click += new System.EventHandler(this.CancelBtnClickedHandler);
 			// 
 			// action
 			// 

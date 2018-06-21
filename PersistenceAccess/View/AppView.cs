@@ -47,7 +47,7 @@ namespace PersistenceAccess.View
 			  .Select(s => s[random.Next(s.Length)]).ToArray());
 		}
 
-		public static ListViewItem[] GetMainListView(bool showDev, bool showQa, bool showTpm)
+		public static ListViewItem[] GetMainListView(VisibilityParam visibParam)
 		{
 			using (var db = new LiteDatabase(Constants.DB_NAME))
 			{
@@ -68,13 +68,22 @@ namespace PersistenceAccess.View
 					}
 					item.Tag = emp.Id;
 					item.Name = emp.Id.ToString();
-					if ((empDC.CurrentTitle == Title.SOFTWARE_ENGINEER && showDev) ||
-						((empDC.CurrentTitle == Title.SOFTWARE_ENGINEER_IN_TEST || empDC.CurrentTitle == Title.SOFTWARE_TEST_ENGINEER) && showQa ) ||
-						(empDC.CurrentTitle == Title.TECHNICAL_PRODUCT_MANAGER && showTpm))
+					if ((empDC.CurrentTitle == Title.SOFTWARE_ENGINEER && visibParam.showDev) ||
+						((empDC.CurrentTitle == Title.SOFTWARE_ENGINEER_IN_TEST || empDC.CurrentTitle == Title.SOFTWARE_TEST_ENGINEER) && visibParam.showQa) ||
+						(empDC.CurrentTitle == Title.TECHNICAL_PRODUCT_MANAGER && visibParam.showTpm) ||
+						(empDC.CurrentTitle == Title.TECHNICAL_WRITER && visibParam.showUe))
 					ret.Add(item);
 				}
 				return ret.ToArray();
 			}
+		}
+
+		public struct VisibilityParam
+		{
+			public bool showDev;
+			public bool showQa;
+			public bool showTpm;
+			public bool showUe;
 		}
 
 		public static ListViewItem[] GetHistoryFromEmployeeView(EmployeeDC emp)

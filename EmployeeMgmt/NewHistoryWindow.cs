@@ -44,12 +44,12 @@ namespace EmployeeMgmt
 			this.action.SelectedItem = ActionType.ANNUAL_PERFORMANCE_REVIEW;
 		}
 
-		private void cancelBtn_Click(object sender, EventArgs e)
+		private void CancelBtnClickedHandler(object sender, EventArgs e)
 		{
 			this.Close();
 		}
 
-		private void createBtn_Click(object sender, EventArgs e)
+		private void CreateBtnClickedHandler(object sender, EventArgs e)
 		{
 			ActionType newAction;
 			Enum.TryParse<ActionType>(this.action.SelectedValue.ToString(), out newAction);

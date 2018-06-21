@@ -163,7 +163,7 @@
 			this.cancelBtn.TabIndex = 0;
 			this.cancelBtn.Text = "Cancel";
 			this.cancelBtn.UseVisualStyleBackColor = true;
-			this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+			this.cancelBtn.Click += new System.EventHandler(this.CancelBtnClickedHandler);
 			// 
 			// createBtn
 			// 
@@ -174,7 +174,7 @@
 			this.createBtn.TabIndex = 1;
 			this.createBtn.Text = "Create";
 			this.createBtn.UseVisualStyleBackColor = true;
-			this.createBtn.Click += new System.EventHandler(this.createBtn_Click);
+			this.createBtn.Click += new System.EventHandler(this.CreateBtnClickedHandler);
 			// 
 			// onboard
 			// 
@@ -189,7 +189,7 @@
 			this.email.Name = "email";
 			this.email.Size = new System.Drawing.Size(299, 20);
 			this.email.TabIndex = 29;
-			this.email.TextChanged += new System.EventHandler(this.validate_input);
+			this.email.TextChanged += new System.EventHandler(this.InputValidationEvtHandler);
 			// 
 			// gender
 			// 
@@ -206,7 +206,7 @@
 			this.lastName.Name = "lastName";
 			this.lastName.Size = new System.Drawing.Size(100, 20);
 			this.lastName.TabIndex = 25;
-			this.lastName.TextChanged += new System.EventHandler(this.validate_input);
+			this.lastName.TextChanged += new System.EventHandler(this.InputValidationEvtHandler);
 			// 
 			// frstName
 			// 
@@ -214,7 +214,7 @@
 			this.frstName.Name = "frstName";
 			this.frstName.Size = new System.Drawing.Size(100, 20);
 			this.frstName.TabIndex = 23;
-			this.frstName.TextChanged += new System.EventHandler(this.validate_input);
+			this.frstName.TextChanged += new System.EventHandler(this.InputValidationEvtHandler);
 			// 
 			// title
 			// 
