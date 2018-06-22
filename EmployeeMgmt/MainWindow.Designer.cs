@@ -42,9 +42,10 @@ namespace EmployeeMgmt
 			System.Windows.Forms.Label levelLable;
 			System.Windows.Forms.Label salaryLabel;
 			System.Windows.Forms.Label managerLabel;
+			System.Windows.Forms.Label label1;
 			this.employeeListContainer = new System.Windows.Forms.ListView();
 			this.generalInfoContainer = new System.Windows.Forms.GroupBox();
-			this.resignInfo = new System.Windows.Forms.Label();
+			this.ReviewInfo = new System.Windows.Forms.Label();
 			this.gManagerDisplay = new System.Windows.Forms.Label();
 			this.gSalaryDisplay = new System.Windows.Forms.Label();
 			this.gLevelDisplay = new System.Windows.Forms.Label();
@@ -72,6 +73,9 @@ namespace EmployeeMgmt
 			this.showQa = new System.Windows.Forms.CheckBox();
 			this.showTpm = new System.Windows.Forms.CheckBox();
 			this.showUe = new System.Windows.Forms.CheckBox();
+			this.NextReview = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.GlobalReviewInfo = new System.Windows.Forms.Label();
+			this.YofEmpValue = new System.Windows.Forms.Label();
 			Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			Email = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			Onboard = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -84,6 +88,7 @@ namespace EmployeeMgmt
 			levelLable = new System.Windows.Forms.Label();
 			salaryLabel = new System.Windows.Forms.Label();
 			managerLabel = new System.Windows.Forms.Label();
+			label1 = new System.Windows.Forms.Label();
 			this.generalInfoContainer.SuspendLayout();
 			this.historyInfoContainer.SuspendLayout();
 			this.SuspendLayout();
@@ -189,7 +194,8 @@ namespace EmployeeMgmt
 			this.employeeListContainer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             Name,
             Email,
-            Onboard});
+            Onboard,
+            this.NextReview});
 			this.employeeListContainer.FullRowSelect = true;
 			this.employeeListContainer.HideSelection = false;
 			this.employeeListContainer.LabelWrap = false;
@@ -205,7 +211,9 @@ namespace EmployeeMgmt
 			// 
 			// generalInfoContainer
 			// 
-			this.generalInfoContainer.Controls.Add(this.resignInfo);
+			this.generalInfoContainer.Controls.Add(this.YofEmpValue);
+			this.generalInfoContainer.Controls.Add(label1);
+			this.generalInfoContainer.Controls.Add(this.ReviewInfo);
 			this.generalInfoContainer.Controls.Add(this.gManagerDisplay);
 			this.generalInfoContainer.Controls.Add(this.gSalaryDisplay);
 			this.generalInfoContainer.Controls.Add(this.gLevelDisplay);
@@ -234,14 +242,15 @@ namespace EmployeeMgmt
 			this.generalInfoContainer.TabStop = false;
 			this.generalInfoContainer.Text = "General Information";
 			// 
-			// resignInfo
+			// ReviewInfo
 			// 
-			this.resignInfo.AutoSize = true;
-			this.resignInfo.ForeColor = System.Drawing.Color.Red;
-			this.resignInfo.Location = new System.Drawing.Point(72, 126);
-			this.resignInfo.Name = "resignInfo";
-			this.resignInfo.Size = new System.Drawing.Size(0, 13);
-			this.resignInfo.TabIndex = 22;
+			this.ReviewInfo.AutoSize = true;
+			this.ReviewInfo.ForeColor = System.Drawing.Color.Red;
+			this.ReviewInfo.Location = new System.Drawing.Point(72, 126);
+			this.ReviewInfo.Name = "ReviewInfo";
+			this.ReviewInfo.Size = new System.Drawing.Size(61, 13);
+			this.ReviewInfo.TabIndex = 22;
+			this.ReviewInfo.Text = "ReviewInfo";
 			// 
 			// gManagerDisplay
 			// 
@@ -476,11 +485,43 @@ namespace EmployeeMgmt
 			this.showUe.UseVisualStyleBackColor = true;
 			this.showUe.CheckedChanged += new System.EventHandler(this.CatelogChangedHandler);
 			// 
+			// NextReview
+			// 
+			this.NextReview.Text = "Next Review";
+			this.NextReview.Width = 100;
+			// 
+			// GlobalReviewInfo
+			// 
+			this.GlobalReviewInfo.AutoSize = true;
+			this.GlobalReviewInfo.Location = new System.Drawing.Point(1070, 20);
+			this.GlobalReviewInfo.Name = "GlobalReviewInfo";
+			this.GlobalReviewInfo.Size = new System.Drawing.Size(141, 13);
+			this.GlobalReviewInfo.TabIndex = 9;
+			this.GlobalReviewInfo.Text = "Company Next Review Date";
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(656, 57);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(109, 13);
+			label1.TabIndex = 23;
+			label1.Text = "Years of Employment:";
+			// 
+			// YofEmpValue
+			// 
+			this.YofEmpValue.AutoSize = true;
+			this.YofEmpValue.Location = new System.Drawing.Point(771, 57);
+			this.YofEmpValue.Name = "YofEmpValue";
+			this.YofEmpValue.Size = new System.Drawing.Size(0, 13);
+			this.YofEmpValue.TabIndex = 24;
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1310, 761);
+			this.Controls.Add(this.GlobalReviewInfo);
 			this.Controls.Add(this.showUe);
 			this.Controls.Add(this.showTpm);
 			this.Controls.Add(this.showQa);
@@ -527,12 +568,15 @@ namespace EmployeeMgmt
 		private System.Windows.Forms.ColumnHeader h_bonus;
 		private System.Windows.Forms.ColumnHeader h_action;
 		private System.Windows.Forms.ColumnHeader h_manager;
-		private System.Windows.Forms.Label resignInfo;
+		private System.Windows.Forms.Label ReviewInfo;
 		private System.Windows.Forms.Button accessAnalyticsBtn;
 		private System.Windows.Forms.CheckBox showDev;
 		private System.Windows.Forms.CheckBox showQa;
 		private System.Windows.Forms.CheckBox showTpm;
 		private System.Windows.Forms.CheckBox showUe;
+		private System.Windows.Forms.ColumnHeader NextReview;
+		private System.Windows.Forms.Label GlobalReviewInfo;
+		private System.Windows.Forms.Label YofEmpValue;
 	}
 }
 

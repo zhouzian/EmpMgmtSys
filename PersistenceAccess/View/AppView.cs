@@ -2,6 +2,7 @@
 using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
 using PersistenceAccess.Factories;
+using PersistenceAccess.Policies;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -56,15 +57,20 @@ namespace PersistenceAccess.View
 				foreach(var emp in employees)
 				{
 					var empDC = new EmployeeDC(emp, db);
-					var subItems = new string[] { empDC.SelfName, empDC.Email, empDC.OnboardDate.ToShortDateString() };
+					var subItems = new string[] { empDC.SelfName, empDC.Email, empDC.OnboardDate.ToShortDateString(), empDC.NextReviewDate?.ToShortDateString() };
 					if (empDC.ResignDate != null)
 					{
 						subItems[0] = subItems[0] + " (Resigned)";
+					}
+					else if (empDC.NextReviewDate == GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate())
+					{
+						subItems[3] = '\u26a0' + " " + subItems[3];
 					}
 					var item = new ListViewItem(subItems);
 					if (empDC.ResignDate != null)
 					{
 						item.ForeColor = Color.Red;
+						item.Font = new Font(item.Font, FontStyle.Strikeout);
 					}
 					item.Tag = emp.Id;
 					item.Name = emp.Id.ToString();

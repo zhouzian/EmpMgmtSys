@@ -57,6 +57,9 @@
     <Compile Include="Factories\EmployeeFactory.cs" />
     <Compile Include="Factories\HistoryFactory.cs" />
     <Compile Include="Factories\Persistence.cs" />
+    <Compile Include="Policies\GlobalPolicyContainer.cs" />
+    <Compile Include="Policies\IPerformancReviewPolicy.cs" />
+    <Compile Include="Policies\QuarterBasedPerformanceReviewPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\AppView.cs" />
   </ItemGroup>

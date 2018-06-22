@@ -1,7 +1,9 @@
 ﻿using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
+using PersistenceAccess.Policies;
 using PersistenceAccess.View;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using static PersistenceAccess.View.AppView;
 
@@ -26,6 +28,9 @@ namespace EmployeeMgmt
 			this.showTpm.Checked = true;
 			this.showUe.Checked = true;
 			UpdateMainListing();
+
+			// Display policy info
+			this.GlobalReviewInfo.Text = "Incoming performance review date: " + GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate().ToShortDateString();
 
 			// Bind enum value to dropdowns
 			this.gGender.DataSource = Enum.GetValues(typeof(Gender));
@@ -62,13 +67,16 @@ namespace EmployeeMgmt
 			this.gLevelDisplay.Text = emp.CurrentLevel.ToString();
 			this.gSalaryDisplay.Text = emp.CurrentSalary.ToString("C0");
 			this.gManagerDisplay.Text = emp.ManagerName;
+			this.YofEmpValue.Text = emp.YearOfEmployment.ToString();
 			if (emp.ResignDate == null)
 			{
-				this.resignInfo.Text = string.Empty;
+				this.ReviewInfo.Text = '\u26a0' + " Next performance review on " + ((DateTime)emp.NextReviewDate).ToShortDateString();
+				this.ReviewInfo.ForeColor = Color.Black;
 			}
 			else
 			{
-				this.resignInfo.Text = "Resigned on " + ((DateTime)emp.ResignDate).ToShortDateString();
+				this.ReviewInfo.Text = "Resigned on " + ((DateTime)emp.ResignDate).ToShortDateString();
+				this.ReviewInfo.ForeColor = Color.Red;
 			}
 		}
 
@@ -176,7 +184,7 @@ namespace EmployeeMgmt
 			this.gSalaryDisplay.Text = string.Empty;
 			this.gTitleDisplay.Text = string.Empty;
 			this.gLevelDisplay.Text = string.Empty;
-			this.resignInfo.Text = string.Empty;
+			this.ReviewInfo.Text = string.Empty;
 		}
 
 		private void UnlockGeneralInfoSection()

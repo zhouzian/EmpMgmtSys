@@ -1,6 +1,7 @@
 ﻿using LiteDB;
 using PersistenceAccess.Entities;
 using PersistenceAccess.Factories;
+using PersistenceAccess.Policies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,17 @@ namespace PersistenceAccess.DataContracts
 			CurrentLevel = History.OrderBy(his => his.Date).Last().Level;
 			CurrentSalary = History.OrderBy(his => his.Date).Last().Salary;
 			ResignDate = History.LastOrDefault(his => his.Action == ActionType.RESIGN)?.Date;
+
+			// populate performance review lated info
+			NextReviewDate = GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetMyNextReviewDate(this);
+			if (this.ResignDate == null)
+			{
+				YearOfEmployment = (int)(DateTime.Now - this.OnboardDate).TotalDays / 365 + 1;
+			}
+			else
+			{
+				YearOfEmployment = (int)((DateTime)this.ResignDate - this.OnboardDate).TotalDays / 365 + 1;
+			}
 		}
 
 		public Employee CurrentManager { get; private set; }
@@ -77,5 +89,12 @@ namespace PersistenceAccess.DataContracts
 				return FirstName + " " + LastName;
 			}
 		}
+
+		/// <summary>
+		/// Returns the next annual performance review date. The date is populated in the constructor when an Employee object is passed in.
+		/// </summary>
+		public DateTime? NextReviewDate { get; private set; }
+
+		public int YearOfEmployment { get; private set; }
 	}
 }
