@@ -185,6 +185,7 @@ namespace EmployeeMgmt
 			this.gTitleDisplay.Text = string.Empty;
 			this.gLevelDisplay.Text = string.Empty;
 			this.ReviewInfo.Text = string.Empty;
+			this.YofEmpValue.Text = string.Empty;
 		}
 
 		private void UnlockGeneralInfoSection()
