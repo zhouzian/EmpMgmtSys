@@ -57,6 +57,7 @@
     <Compile Include="Factories\EmployeeFactory.cs" />
     <Compile Include="Factories\HistoryFactory.cs" />
     <Compile Include="Factories\Persistence.cs" />
+    <Compile Include="Policies\BasicPerformanceReviewPolicy.cs" />
     <Compile Include="Policies\GlobalPolicyContainer.cs" />
     <Compile Include="Policies\IPerformancReviewPolicy.cs" />
     <Compile Include="Policies\QuarterBasedPerformanceReviewPolicy.cs" />
