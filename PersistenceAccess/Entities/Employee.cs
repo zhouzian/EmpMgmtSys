@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PersistenceAccess.Entities
 {
@@ -27,7 +28,10 @@ namespace PersistenceAccess.Entities
 
 	public enum Gender
 	{
+		[Display(Name = "Male")]
 		MALE = 0,
+
+		[Display(Name = "Female")]
 		FEMALE = 1
 	}
 }

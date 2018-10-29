@@ -5,6 +5,7 @@ using PersistenceAccess.View;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using PersistenceAccess.Extensions;
 using static PersistenceAccess.View.AppView;
 
 namespace EmployeeMgmt
@@ -33,8 +34,7 @@ namespace EmployeeMgmt
 			this.GlobalReviewInfo.Text = "Incoming performance review date: " + GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate().ToShortDateString();
 
 			// Bind enum value to dropdowns
-			this.gGender.DataSource = Enum.GetValues(typeof(Gender));
-
+			this.gGender.RenderDatasource(typeof(Gender));
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace EmployeeMgmt
 		{
 			UnlockGeneralInfoSection();
 			Guid id = (Guid)e.Item.Tag;
-			EmployeeDC emp = AppView.GetEmployee((Guid)id);
+			EmployeeDC emp = GetEmployee(id);
 			PopulateGeneralInfoSection(emp);
 			PopulateHistorySection(emp);
 			DisableGeneralInfoBtns();
@@ -61,10 +61,10 @@ namespace EmployeeMgmt
 			this.gLastName.Modified = false;
 			this.gEmail.Text = emp.Email;
 			this.gEmail.Modified = false;
-			this.gGender.SelectedItem = emp.Gender;
+			this.gGender.SelectedValue = emp.Gender;
 			this.gOnboard.Value = emp.OnboardDate;
-			this.gTitleDisplay.Text = emp.CurrentTitle.ToString();
-			this.gLevelDisplay.Text = emp.CurrentLevel.ToString();
+			this.gTitleDisplay.Text = emp.CurrentTitle.GetDisplayName();
+			this.gLevelDisplay.Text = emp.CurrentLevel.GetDisplayName();
 			this.gSalaryDisplay.Text = emp.CurrentSalary.ToString("C0");
 			this.gManagerDisplay.Text = emp.ManagerName;
 			this.YofEmpValue.Text = emp.YearOfEmployment.ToString();
@@ -108,8 +108,7 @@ namespace EmployeeMgmt
 		private void GeneralInfoSaveBtnClickedHandler(object sender, EventArgs e)
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			Gender gender;
-			Enum.TryParse<Gender>(this.gGender.SelectedValue.ToString(), out gender);
+			Gender gender = (Gender)this.gGender.SelectedValue;
 			AppView.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
 			UpdateMainListing();
 		}

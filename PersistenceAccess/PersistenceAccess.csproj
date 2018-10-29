@@ -37,6 +37,7 @@
       <HintPath>..\packages\LiteDB.4.1.4\lib\net40\LiteDB.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -54,6 +55,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\StatusChangeHistory.cs" />
+    <Compile Include="Extensions\ComboxDatasourceExtension.cs" />
+    <Compile Include="Extensions\EnumDisplayExtension.cs" />
     <Compile Include="Factories\EmployeeFactory.cs" />
     <Compile Include="Factories\HistoryFactory.cs" />
     <Compile Include="Factories\Persistence.cs" />

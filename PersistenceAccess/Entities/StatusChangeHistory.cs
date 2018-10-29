@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PersistenceAccess.Entities
 {
@@ -36,32 +37,70 @@ namespace PersistenceAccess.Entities
 
 	public enum Title
 	{
+		[Display(Name = "Software Engineer")]
 		SOFTWARE_ENGINEER = 0,
+
+		[Display(Name = "Software Engineer in Test")]
 		SOFTWARE_ENGINEER_IN_TEST = 1,
+
+		[Display(Name = "Software Test Engineer")]
 		SOFTWARE_TEST_ENGINEER = 2,
+
+		[Display(Name = "Technical Product Manager")]
 		TECHNICAL_PRODUCT_MANAGER = 3,
+
+		[Display(Name = "Technical Writer")]
 		TECHNICAL_WRITER = 4
 	}
 
 	public enum Level
 	{
+		[Display(Name = "N/A")]
 		NONE = 0,
+
+		[Display(Name = "I")]
 		I = 1,
+
+		[Display(Name = "II")]
 		II = 2,
+
+		[Display(Name = "III")]
 		III = 3,
+
+		[Display(Name = "Senior")]
 		SENIOR = 4,
+
+		[Display(Name = "Staff")]
 		STAFF = 5,
+
+		[Display(Name = "Principle")]
 		PRINCIPLE = 6
 	}
 
 	public enum ActionType
 	{
+		[Display(Name = "Resign")]
 		RESIGN = 0,
+
+		[Display(Name = "Onboard")]
 		ONBOARD = 1,
+
+		[Display(Name = "Annual performance review")]
 		ANNUAL_PERFORMANCE_REVIEW = 2,
+
+		[Display(Name = "3 month performance review")]
 		THREE_MONTH_REVIEW = 3,
+
+		[Display(Name = "6 month performance review")]
 		SIX_MONTH_REVIEW = 4,
+
+		[Display(Name = "Manager change")]
 		MANAGER_CHANGE = 5,
-		TITLE_CHANGE = 6
+
+		[Display(Name = "Title change")]
+		TITLE_CHANGE = 6,
+
+		[Display(Name = "Compensation change")]
+		COMPENSATION_CHANGE = 7
 	}
 }

@@ -1,14 +1,13 @@
 ﻿using LiteDB;
 using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
+using PersistenceAccess.Extensions;
 using PersistenceAccess.Factories;
 using PersistenceAccess.Policies;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PersistenceAccess.View
@@ -122,12 +121,12 @@ namespace PersistenceAccess.View
 			List<ListViewItem> ret = new List<ListViewItem>();
 			foreach(var his in emp.History)
 			{
-				string title = his.Title.ToString();
-				string level = his.Level.ToString();
+				string title = his.Title.GetDisplayName();
+				string level = his.Level.GetDisplayName();
 				string salary = his.Salary.ToString("C0");
 				string bonus = his.Bonus.ToString("C0");
 				string manager = his.ManagerName;
-				var item = new ListViewItem(new string[] { his.Date.ToShortDateString(), title, level, salary, bonus, manager, his.Action.ToString() });
+				var item = new ListViewItem(new string[] { his.Date.ToShortDateString(), title, level, salary, bonus, manager, his.Action.GetDisplayName() });
 				item.Tag = his.Id;
 				ret.Add(item);
 			}
