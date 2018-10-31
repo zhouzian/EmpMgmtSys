@@ -1,5 +1,6 @@
 ﻿using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
+using PersistenceAccess.Extensions;
 using PersistenceAccess.View;
 using System;
 using System.Collections.Generic;
@@ -34,14 +35,14 @@ namespace EmployeeMgmt
 
 		private void InitializeState()
 		{
-			this.action.DataSource = Enum.GetValues(typeof(ActionType));
-			this.title.DataSource = Enum.GetValues(typeof(Title));
-			this.level.DataSource = Enum.GetValues(typeof(Level));
-			this.title.DataSource = Enum.GetValues(typeof(Title));
+			this.action.RenderDatasource(typeof(ActionType));
+			this.title.RenderDatasource(typeof(Title));
+			this.level.RenderDatasource(typeof(Level));
+			this.title.RenderDatasource(typeof(Title));
 			this.manager.DataSource = AppView.GetManagerList();
 			this.manager.DisplayMember = "Name";
 			this.manager.ValueMember = "Id";
-			this.action.SelectedItem = ActionType.ANNUAL_PERFORMANCE_REVIEW;
+			this.action.SelectedValue = ActionType.ANNUAL_PERFORMANCE_REVIEW;
 		}
 
 		private void CancelBtnClickedHandler(object sender, EventArgs e)
@@ -51,12 +52,9 @@ namespace EmployeeMgmt
 
 		private void CreateBtnClickedHandler(object sender, EventArgs e)
 		{
-			ActionType newAction;
-			Enum.TryParse<ActionType>(this.action.SelectedValue.ToString(), out newAction);
-			Title newTitle;
-			Enum.TryParse<Title>(this.title.SelectedValue.ToString(), out newTitle);
-			Level newLevel;
-			Enum.TryParse<Level>(this.level.SelectedValue.ToString(), out newLevel);
+			ActionType newAction = (ActionType)this.action.SelectedValue;
+			Title newTitle = (Title)this.title.SelectedValue;
+			Level newLevel = (Level)this.level.SelectedValue;
 			AppView.CreateEmployeeHistory(this.currentEmployeeId, (Guid)this.manager.SelectedValue, newTitle, newLevel, this.salary.Value, this.bonus.Value, newAction, this.date.Value);
 			this.currentEmployeeTitle = newTitle;
 			this.Close();
