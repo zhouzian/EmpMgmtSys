@@ -22,18 +22,13 @@ namespace PersistenceAccess.Repositories
             this.db = db;
         }
 
-        public IEnumerable<EmployeeDC> GetAllEmployees(bool includeResigned = true)
+        public IEnumerable<EmployeeDC> GetAllEmployees()
         {
             IEnumerable<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME).FindAll().OrderBy(emp => emp.OnboardDate);
             var ret = new List<EmployeeDC>();
             foreach(Employee emp in employees)
             {
-                var empDC = new EmployeeDC(emp, db);
-                ret.Add(empDC);
-            }
-            if (!includeResigned)
-            {
-                ret = ret.Where(emp => emp.ResignDate != null).ToList();
+                ret.Add(new EmployeeDC(emp, db));
             }
             return ret;
         }
