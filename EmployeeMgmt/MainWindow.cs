@@ -11,6 +11,11 @@ namespace EmployeeMgmt
 {
 	public partial class MainWindow : Form
 	{
+        /// <summary>
+        /// The initializationCompleted flag is used to block all handlers execution during the window initialization process.
+        /// Without the flag, when initialization the checkboxes, the checkbox click handler will be triggered, causing unnecessary database access.
+        /// </summary>
+        private bool initializationCompleted = false;
         private EmployeeRepository empRepo;
         private ViewGeneratorHelper viewHelper;
 		public MainWindow()
@@ -19,6 +24,7 @@ namespace EmployeeMgmt
             viewHelper = new ViewGeneratorHelper(empRepo);
 			InitializeComponent();
 			InitializeState();
+            initializationCompleted = true;
 		}
 
 		private void InitializeState()
@@ -47,13 +53,16 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void CurrentEmployeeSelectionChangedHandler(object sender, ListViewItemSelectionChangedEventArgs e)
 		{
-			UnlockGeneralInfoSection();
-			Guid id = (Guid)e.Item.Tag;
-			EmployeeDC emp = empRepo.GetEmployee(id);
-			PopulateGeneralInfoSection(emp);
-			PopulateHistorySection(emp);
-			DisableGeneralInfoBtns();
-			UnlockHistory();
+            if (initializationCompleted)
+            {
+                UnlockGeneralInfoSection();
+                Guid id = (Guid)e.Item.Tag;
+                EmployeeDC emp = empRepo.GetEmployee(id);
+                PopulateGeneralInfoSection(emp);
+                PopulateHistorySection(emp);
+                DisableGeneralInfoBtns();
+                UnlockHistory();
+            }
 		}
 
 		private void PopulateGeneralInfoSection(EmployeeDC emp)
@@ -97,10 +106,13 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void GeneralInfoRevertBtnClickedHandler(object sender, EventArgs e)
 		{
-			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			EmployeeDC emp = empRepo.GetEmployee(id);
-			PopulateGeneralInfoSection(emp);
-			DisableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
+                EmployeeDC emp = empRepo.GetEmployee(id);
+                PopulateGeneralInfoSection(emp);
+                DisableGeneralInfoBtns();
+            }
 		}
 
 		/// <summary>
@@ -110,10 +122,13 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void GeneralInfoSaveBtnClickedHandler(object sender, EventArgs e)
 		{
-			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			Gender gender = (Gender)this.gGender.SelectedValue;
-			empRepo.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
-			UpdateMainListing();
+            if (initializationCompleted)
+            {
+                Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
+                Gender gender = (Gender)this.gGender.SelectedValue;
+                empRepo.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
+                UpdateMainListing();
+            }
 		}
 
 		private void UpdateMainListing()
@@ -212,27 +227,42 @@ namespace EmployeeMgmt
 
 		private void FirstNameModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void LastNameModifiedHander(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void EmailModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void GenderModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void OnboardDateModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		#endregion
@@ -244,16 +274,19 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void NewEmployeeBtnClickedHandler(object sender, EventArgs e)
 		{
-			using (var newEmpDlg = new NewEmployeeWindow())
-			{
-				if (newEmpDlg.ShowDialog() == DialogResult.OK)
-				{
-					EnsureChecked(newEmpDlg.newEmployeeTitle);
-					UpdateMainListing();
-					Guid tmp = newEmpDlg.newEmployeeId;
-					SelectEmployee(tmp.ToString());
-				}
-			}
+            if (initializationCompleted)
+            {
+                using (var newEmpDlg = new NewEmployeeWindow())
+                {
+                    if (newEmpDlg.ShowDialog() == DialogResult.OK)
+                    {
+                        EnsureChecked(newEmpDlg.newEmployeeTitle);
+                        UpdateMainListing();
+                        Guid tmp = newEmpDlg.newEmployeeId;
+                        SelectEmployee(tmp.ToString());
+                    }
+                }
+            }
 		}
 
 		private void SelectEmployee(string id)
@@ -266,31 +299,40 @@ namespace EmployeeMgmt
 
 		private void CreateHistoryBtnClickedHandler(object sender, EventArgs e)
 		{
-			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			EmployeeDC emp = empRepo.GetEmployee((Guid)id);
-			using (var newHistoryDlg = new NewHistoryWindow(emp))
-			{
-				if (newHistoryDlg.ShowDialog() == DialogResult.OK)
-				{
-					EnsureChecked(newHistoryDlg.currentEmployeeTitle);
-					UpdateMainListing();
-					Guid tmp = newHistoryDlg.currentEmployeeId;
-					SelectEmployee(tmp.ToString());
-				}
-			}
+            if (initializationCompleted)
+            {
+                Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
+                EmployeeDC emp = empRepo.GetEmployee((Guid)id);
+                using (var newHistoryDlg = new NewHistoryWindow(emp))
+                {
+                    if (newHistoryDlg.ShowDialog() == DialogResult.OK)
+                    {
+                        EnsureChecked(newHistoryDlg.currentEmployeeTitle);
+                        UpdateMainListing();
+                        Guid tmp = newHistoryDlg.currentEmployeeId;
+                        SelectEmployee(tmp.ToString());
+                    }
+                }
+            }
 		}
 
 		private void AnalyticsBtnClickedHandler(object sender, EventArgs e)
 		{
-			using (var analyticsDlg = new AnalyticsWindow())
-			{
-				analyticsDlg.ShowDialog();
-			}
+            if (initializationCompleted)
+            {
+                using (var analyticsDlg = new AnalyticsWindow())
+                {
+                    analyticsDlg.ShowDialog();
+                }
+            }
 		}
 
 		private void CatelogChangedHandler(object sender, EventArgs e)
 		{
-			UpdateMainListing();
+            if (initializationCompleted)
+            {
+                UpdateMainListing();
+            }
 		}
 
 		private void EnsureChecked(Title title)
