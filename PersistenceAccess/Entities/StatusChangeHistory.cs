@@ -73,8 +73,11 @@ namespace PersistenceAccess.Entities
 		[Display(Name = "Staff")]
 		STAFF = 5,
 
+        [Display(Name = "Senior Staff")]
+        SENIOR_STAFF = 6,
+
 		[Display(Name = "Principle")]
-		PRINCIPLE = 6
+		PRINCIPLE = 7
 	}
 
 	public enum ActionType

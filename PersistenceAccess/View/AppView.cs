@@ -250,7 +250,8 @@ namespace PersistenceAccess.View
 			ret.III_Count = source.Where(condition).Where(s => s.CurrentLevel == Level.III).Count();
 			ret.Senior_Count = source.Where(condition).Where(s => s.CurrentLevel == Level.SENIOR).Count();
 			ret.Staff_Count = source.Where(condition).Where(s => s.CurrentLevel == Level.STAFF).Count();
-			ret.Principle_Count = source.Where(condition).Where(s => s.CurrentLevel == Level.PRINCIPLE).Count();
+            ret.Senior_Staff_Count = source.Where(condition).Where(s => s.CurrentLevel == Level.SENIOR_STAFF).Count();
+            ret.Principle_Count = source.Where(condition).Where(s => s.CurrentLevel == Level.PRINCIPLE).Count();
 
 			return ret;
 		}

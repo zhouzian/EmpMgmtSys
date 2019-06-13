@@ -42,15 +42,8 @@ namespace EmployeeMgmt
 
 		private void PopulateDEVSection(AnalyticsDC result)
 		{
-			string[] x = new string[] { "None: " + result.DEVStatistic.None_Count,
-				"I: " + result.DEVStatistic.I_Count,
-				"II: " + result.DEVStatistic.II_Count,
-				"III: " + result.DEVStatistic.III_Count,
-				"Senior: " + result.DEVStatistic.Senior_Count,
-				"Staff: " + result.DEVStatistic.Staff_Count,
-				"Principle: " + result.DEVStatistic.Principle_Count };
-			int[] y = new int[] { result.DEVStatistic.None_Count, result.DEVStatistic.I_Count, result.DEVStatistic.II_Count, result.DEVStatistic.III_Count, result.DEVStatistic.Senior_Count, result.DEVStatistic.Staff_Count, result.DEVStatistic.Principle_Count };
-			this.devPie.Series[0].Points.DataBindXY(x, y);
+            Legend legend = GenerateLegend(result.DEVStatistic);
+            this.devPie.Series[0].Points.DataBindXY(legend.Items, legend.Values);
 			this.devPie.Series[0]["PieLabelStyle"] = "Disabled";
 
 			this.devCountValue.Text = result.DEVStatistic.Count.ToString();
@@ -62,15 +55,8 @@ namespace EmployeeMgmt
 
 		private void PopulateQASection(AnalyticsDC result)
 		{
-			string[] x = new string[] { "None: " + result.QAStatistic.None_Count,
-				"I: " + result.QAStatistic.I_Count,
-				"II: " + result.QAStatistic.II_Count,
-				"III: " + result.QAStatistic.III_Count,
-				"Senior: " + result.QAStatistic.Senior_Count,
-				"Staff: " + result.QAStatistic.Staff_Count,
-				"Principle: " + result.QAStatistic.Principle_Count };
-			int[] y = new int[] { result.QAStatistic.None_Count, result.QAStatistic.I_Count, result.QAStatistic.II_Count, result.QAStatistic.III_Count, result.QAStatistic.Senior_Count, result.QAStatistic.Staff_Count, result.QAStatistic.Principle_Count };
-			this.qaPie.Series[0].Points.DataBindXY(x, y);
+            Legend legend = GenerateLegend(result.QAStatistic);
+            this.qaPie.Series[0].Points.DataBindXY(legend.Items, legend.Values);
 			this.qaPie.Series[0]["PieLabelStyle"] = "Disabled";
 
 			this.qaCountValue.Text = result.QAStatistic.Count.ToString();
@@ -82,15 +68,8 @@ namespace EmployeeMgmt
 
 		private void PopulateTPMSection(AnalyticsDC result)
 		{
-			string[] x = new string[] { "None: " + result.TPMStatistic.None_Count,
-				"I: " + result.TPMStatistic.I_Count,
-				"II: " + result.TPMStatistic.II_Count,
-				"III: " + result.TPMStatistic.III_Count,
-				"Senior: " + result.TPMStatistic.Senior_Count,
-				"Staff: " + result.TPMStatistic.Staff_Count,
-				"Principle: " + result.TPMStatistic.Principle_Count };
-			int[] y = new int[] { result.TPMStatistic.None_Count, result.TPMStatistic.I_Count, result.TPMStatistic.II_Count, result.TPMStatistic.III_Count, result.TPMStatistic.Senior_Count, result.TPMStatistic.Staff_Count, result.TPMStatistic.Principle_Count };
-			this.tpmPie.Series[0].Points.DataBindXY(x, y);
+            Legend legend = GenerateLegend(result.TPMStatistic);
+            this.tpmPie.Series[0].Points.DataBindXY(legend.Items, legend.Values);
 			this.tpmPie.Series[0]["PieLabelStyle"] = "Disabled";
 
 			this.tpmCountValue.Text = result.TPMStatistic.Count.ToString();
@@ -102,15 +81,8 @@ namespace EmployeeMgmt
 
 		private void PopulateUESection(AnalyticsDC result)
 		{
-			string[] x = new string[] { "None: " + result.UEStatistic.None_Count,
-				"I: " + result.UEStatistic.I_Count,
-				"II: " + result.UEStatistic.II_Count,
-				"III: " + result.UEStatistic.III_Count,
-				"Senior: " + result.UEStatistic.Senior_Count,
-				"Staff: " + result.UEStatistic.Staff_Count,
-				"Principle: " + result.UEStatistic.Principle_Count };
-			int[] y = new int[] { result.UEStatistic.None_Count, result.UEStatistic.I_Count, result.UEStatistic.II_Count, result.UEStatistic.III_Count, result.UEStatistic.Senior_Count, result.UEStatistic.Staff_Count, result.UEStatistic.Principle_Count };
-			this.uePie.Series[0].Points.DataBindXY(x, y);
+            Legend legend = GenerateLegend(result.UEStatistic);
+			this.uePie.Series[0].Points.DataBindXY(legend.Items, legend.Values);
 			this.uePie.Series[0]["PieLabelStyle"] = "Disabled";
 
 			this.ueCountValue.Text = result.UEStatistic.Count.ToString();
@@ -119,5 +91,36 @@ namespace EmployeeMgmt
 			this.ueMaxValue.Text = result.UEStatistic.Max.ToString("C0");
 			this.ueMinValue.Text = result.UEStatistic.Min.ToString("C0");
 		}
-	}
+
+        private Legend GenerateLegend(LevelStatisticDC statistic)
+        {
+            return new Legend
+            {
+                Items = new string[] {
+                    "None: " + statistic.None_Count,
+                    "I: " + statistic.I_Count,
+                    "II: " + statistic.II_Count,
+                    "III: " + statistic.III_Count,
+                    "Senior: " + statistic.Senior_Count,
+                    "Staff: " + statistic.Staff_Count,
+                    "Principle: " + statistic.Principle_Count
+                },
+                Values = new int[] {
+                    statistic.None_Count,
+                    statistic.I_Count,
+                    statistic.II_Count,
+                    statistic.III_Count,
+                    statistic.Senior_Count,
+                    statistic.Staff_Count,
+                    statistic.Principle_Count
+                }
+            };
+        }
+
+        private struct Legend
+        {
+            public string[] Items;
+            public int[] Values;
+        }
+    }
 }

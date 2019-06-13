@@ -46,6 +46,8 @@ namespace PersistenceAccess.DataContracts
 
 		public int Staff_Count { get; set; }
 
+        public int Senior_Staff_Count { get; set; }
+
 		public int Principle_Count { get; set; }
 	}
 }
