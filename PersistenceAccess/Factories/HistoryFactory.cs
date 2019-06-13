@@ -26,7 +26,7 @@ namespace PersistenceAccess.Factories
 					Bonus = bonus,
 					Action = action
 				};
-				Persistence.GetHistoryStore(db).Insert(onboardHistory);
+				PersistenceStore.GetHistoryStore(db).Insert(onboardHistory);
 				ret = onboardHistory;
 			}
 			catch (Exception ex)

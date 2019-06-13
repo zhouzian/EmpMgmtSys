@@ -3,7 +3,7 @@ using PersistenceAccess.Entities;
 
 namespace PersistenceAccess.Factories
 {
-	public class Persistence
+	public class PersistenceStore
 	{
 		public static LiteCollection<Employee> GetEmployeeStore(LiteDatabase db)
 		{

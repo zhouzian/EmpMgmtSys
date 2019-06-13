@@ -1,29 +1,27 @@
 ﻿using PersistenceAccess.DataContracts;
-using PersistenceAccess.View;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PersistenceAccess.Repositories;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EmployeeMgmt
 {
 	public partial class AnalyticsWindow : Form
 	{
-		public AnalyticsWindow()
+        private EmployeeRepository empRepo;
+        private AnalyticsRepository anaRepo;
+        private ViewGeneratorHelper viewHelper;
+
+        public AnalyticsWindow()
 		{
-			InitializeComponent();
+            empRepo = new EmployeeRepository();
+            anaRepo = new AnalyticsRepository();
+            viewHelper = new ViewGeneratorHelper(empRepo);
+            InitializeComponent();
 			PopulateDate();
 		}
 
 		private void PopulateDate()
 		{
-			AnalyticsDC result = AppView.GetAnaltyics();
+			AnalyticsDC result = anaRepo.GetAnaltyics();
 			PopulateOverallSection(result);
 			PopulateDEVSection(result);
 			PopulateQASection(result);

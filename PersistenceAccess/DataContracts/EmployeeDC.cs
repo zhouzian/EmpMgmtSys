@@ -28,7 +28,7 @@ namespace PersistenceAccess.DataContracts
 			OnboardDate = emp.OnboardDate;
 
 			// populate full history
-			var histories = Persistence.GetHistoryStore(db).Find(Query.EQ("employee_id", Id)).OrderBy(his => his.Date);
+			var histories = PersistenceStore.GetHistoryStore(db).Find(Query.EQ("employee_id", Id)).OrderBy(his => his.Date);
 			var HistoryList = new List<StatusChangeHistoryDC>();
 			foreach(var his in histories)
 			{
@@ -38,7 +38,7 @@ namespace PersistenceAccess.DataContracts
 
 			// find most recent properties including title, level, salary and manager
 			Guid managerId = History.OrderBy(his => his.Date).Last().ManagerId;
-			CurrentManager = managerId == Guid.Empty ?  new Employee() { Id = Guid.Empty } : Persistence.GetEmployeeStore(db).FindById(managerId);
+			CurrentManager = managerId == Guid.Empty ?  new Employee() { Id = Guid.Empty } : PersistenceStore.GetEmployeeStore(db).FindById(managerId);
 			CurrentTitle = History.OrderBy(his => his.Date).Last().Title;
 			CurrentLevel = History.OrderBy(his => his.Date).Last().Level;
 			CurrentSalary = History.OrderBy(his => his.Date).Last().Salary;

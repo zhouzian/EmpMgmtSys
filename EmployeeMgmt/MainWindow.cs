@@ -1,19 +1,22 @@
 ﻿using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
 using PersistenceAccess.Policies;
-using PersistenceAccess.View;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using PersistenceAccess.Extensions;
-using static PersistenceAccess.View.AppView;
+using PersistenceAccess.Repositories;
 
 namespace EmployeeMgmt
 {
 	public partial class MainWindow : Form
 	{
+        private EmployeeRepository empRepo;
+        private ViewGeneratorHelper viewHelper;
 		public MainWindow()
 		{
+            empRepo = new EmployeeRepository();
+            viewHelper = new ViewGeneratorHelper(empRepo);
 			InitializeComponent();
 			InitializeState();
 		}
@@ -21,7 +24,7 @@ namespace EmployeeMgmt
 		private void InitializeState()
 		{
 			// Populate test data in db. Remove before release.
-			AppView.SeedDB();
+			empRepo.SeedDB();
 
 			// Render list view of all employees.
 			this.showDev.Checked = true;
@@ -46,7 +49,7 @@ namespace EmployeeMgmt
 		{
 			UnlockGeneralInfoSection();
 			Guid id = (Guid)e.Item.Tag;
-			EmployeeDC emp = GetEmployee(id);
+			EmployeeDC emp = empRepo.GetEmployee(id);
 			PopulateGeneralInfoSection(emp);
 			PopulateHistorySection(emp);
 			DisableGeneralInfoBtns();
@@ -83,7 +86,7 @@ namespace EmployeeMgmt
 		private void PopulateHistorySection(EmployeeDC emp)
 		{
 			this.historyListContainer.Items.Clear();
-			this.historyListContainer.Items.AddRange(AppView.GetHistoryFromEmployeeView(emp));
+			this.historyListContainer.Items.AddRange(viewHelper.GetHistoryFromEmployeeView(emp));
 			this.historyListContainer.Items[this.historyListContainer.Items.Count - 1].EnsureVisible();
 		}
 
@@ -95,7 +98,7 @@ namespace EmployeeMgmt
 		private void GeneralInfoRevertBtnClickedHandler(object sender, EventArgs e)
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			EmployeeDC emp = AppView.GetEmployee(id);
+			EmployeeDC emp = empRepo.GetEmployee(id);
 			PopulateGeneralInfoSection(emp);
 			DisableGeneralInfoBtns();
 		}
@@ -109,7 +112,7 @@ namespace EmployeeMgmt
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 			Gender gender = (Gender)this.gGender.SelectedValue;
-			AppView.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
+			empRepo.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
 			UpdateMainListing();
 		}
 
@@ -128,7 +131,7 @@ namespace EmployeeMgmt
 				int selectedIndex = this.employeeListContainer.FocusedItem.Index;
 				Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 				this.employeeListContainer.Items.Clear();
-				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(visibParam));
+				this.employeeListContainer.Items.AddRange(viewHelper.GetMainListView(visibParam));
 				if (selectedIndex <= this.employeeListContainer.Items.Count - 1 && (Guid)this.employeeListContainer.Items[selectedIndex].Tag == id)
 				{
 					// to make sure we are still focusing at the same item
@@ -148,7 +151,7 @@ namespace EmployeeMgmt
 			else
 			{
 				this.employeeListContainer.Items.Clear();
-				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(visibParam));
+				this.employeeListContainer.Items.AddRange(viewHelper.GetMainListView(visibParam));
 				LockGeneralInfoSection();
 				DisableGeneralInfoBtns();
 				LockHistory();
@@ -264,7 +267,7 @@ namespace EmployeeMgmt
 		private void CreateHistoryBtnClickedHandler(object sender, EventArgs e)
 		{
 			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			EmployeeDC emp = AppView.GetEmployee((Guid)id);
+			EmployeeDC emp = empRepo.GetEmployee((Guid)id);
 			using (var newHistoryDlg = new NewHistoryWindow(emp))
 			{
 				if (newHistoryDlg.ShowDialog() == DialogResult.OK)

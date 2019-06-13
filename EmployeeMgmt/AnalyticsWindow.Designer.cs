@@ -17,7 +17,19 @@
 			{
 				components.Dispose();
 			}
-			base.Dispose(disposing);
+            if (empRepo != null)
+            {
+                empRepo.Dispose();
+            }
+            if (anaRepo != null)
+            {
+                anaRepo.Dispose();
+            }
+            if (viewHelper != null)
+            {
+                viewHelper.Dispose();
+            }
+            base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
