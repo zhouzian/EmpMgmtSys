@@ -19,14 +19,6 @@ namespace EmployeeMgmt
 			{
 				components.Dispose();
 			}
-            if (empRepo != null)
-            {
-                empRepo.Dispose();
-            }
-            if (viewHelper != null)
-            {
-                viewHelper.Dispose();
-            }
 			base.Dispose(disposing);
 		}
 
@@ -545,6 +537,7 @@ namespace EmployeeMgmt
             this.Padding = new System.Windows.Forms.Padding(3);
             this.ShowIcon = false;
             this.Text = "Employee Management System";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.generalInfoContainer.ResumeLayout(false);
             this.generalInfoContainer.PerformLayout();
             this.historyInfoContainer.ResumeLayout(false);

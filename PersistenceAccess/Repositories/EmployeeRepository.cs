@@ -8,61 +8,57 @@ using System.Linq;
 
 namespace PersistenceAccess.Repositories
 {
-    public class EmployeeRepository : IDisposable
+    public class EmployeeRepository
     {
-        private readonly LiteDatabase db;
-
-        public EmployeeRepository()
+        public IEnumerable<Employee> GetAllEmployeesRaw()
         {
-            this.db = new LiteDatabase(Constants.DB_NAME);
-        }
-
-        public EmployeeRepository(LiteDatabase db)
-        {
-            this.db = db;
+            return PersistenceStore.Current.GetEmployeeStore().FindAll();
         }
 
         public IEnumerable<EmployeeDC> GetAllEmployees()
         {
-            IEnumerable<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME).FindAll();
+            IEnumerable<Employee> employees = GetAllEmployeesRaw();
             var ret = new List<EmployeeDC>();
-            foreach(Employee emp in employees)
+            foreach (Employee emp in employees)
             {
-                ret.Add(new EmployeeDC(emp, db));
+                ret.Add(emp.ConvertToDataContract(this));
             }
             return ret.OrderBy(emp => emp.NextReviewDate).ThenBy(emp => emp.OnboardDate);
         }
 
-        public IEnumerable<Employee> GetAllEmployeesRaw()
+        public Employee GetEmployeeRaw(Guid id)
         {
-            return db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME).FindAll();
+            return PersistenceStore.Current.GetEmployeeStore().FindById(id);
         }
 
         public EmployeeDC GetEmployee(Guid id)
         {
-            LiteCollection<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME);
-            return new EmployeeDC(employees.FindById(id), db);
+            return GetEmployeeRaw(id).ConvertToDataContract(this);
+        }
+
+        public IEnumerable<StatusChangeHistory> GetEmployeeHistoryRaw(Guid id)
+        {
+            return PersistenceStore.Current.GetHistoryStore().Find(Query.EQ("employee_id", id)).OrderBy(his => his.Date);
         }
 
         public EmployeeDC CreateEmployee(Guid managerId, string firstName, string lastName, Gender gender, string email, Title title, Level level, decimal salary, decimal bonus, DateTime onboardDate)
         {
-            LiteCollection<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME);
-            var manager = managerId == Guid.Empty ? new Employee() { Id = Guid.Empty } : employees.FindById(managerId);
-            return new EmployeeDC(EmployeeFactory.CreateEmployee(db, firstName, lastName, gender, email, manager, title, level, salary, bonus, onboardDate), db);
+            var manager = managerId == Guid.Empty ? new Employee() { Id = Guid.Empty } : PersistenceStore.Current.GetEmployeeStore().FindById(managerId);
+            return EmployeeFactory.CreateEmployee(firstName, lastName, gender, email, manager, title, level, salary, bonus, onboardDate).ConvertToDataContract(this);
         }
 
         public void CreateEmployeeHistory(Guid employeeId, Guid managerId, Title title, Level level, Decimal salary, Decimal bonus, ActionType action, DateTime date)
         {
-            LiteCollection<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME);
+            LiteCollection<Employee> employees = PersistenceStore.Current.GetEmployeeStore();
             var employee = employees.FindById(employeeId);
             var manager = managerId == Guid.Empty ? new Employee() { Id = Guid.Empty } : employees.FindById(managerId);
-            HistoryFactory.CreateHistory(db, employee, manager, title, level, salary, bonus, action, date);
+            HistoryFactory.CreateHistory(employee, manager, title, level, salary, bonus, action, date);
         }
 
         public void UpdateEmployeeGeneralInfo(Guid id, string firstName, string lastName, Gender gender, string email, DateTime onboard)
         {
-            LiteCollection<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME);
-            EmployeeFactory.UpdateEmployeeInfo(db, employees.FindById(id), firstName, lastName, gender, email, onboard);
+            LiteCollection<Employee> employees = PersistenceStore.Current.GetEmployeeStore();
+            EmployeeFactory.UpdateEmployeeInfo(employees.FindById(id), firstName, lastName, gender, email, onboard);
         }
 
         #region Test data
@@ -82,19 +78,18 @@ namespace PersistenceAccess.Repositories
                 {
                     db.DropCollection(collectionName);
                 }
+            }
 
-                //setup test data
-                Employee nextMgr = new Employee() { Id = Guid.Empty };
-                for (int i = 0; i < 99; i++)
-                {
-                    FakeName fname = GetAName();
-                    DateTime onboardDate = DateTime.Now.AddMonths(random.Next(-100, -12));
-                    DateTime recentPerfReviewDate = new DateTime(DateTime.Now.Year - 1, onboardDate.Month, 1);
-                    Employee theNextMgr = EmployeeFactory.CreateEmployee(db, fname.FirstName, fname.LastName, (Gender)GetValue(genders), fname.Email, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), onboardDate);
-                    HistoryFactory.CreateHistory(db, theNextMgr, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), ActionType.ANNUAL_PERFORMANCE_REVIEW, recentPerfReviewDate);
-                    nextMgr = theNextMgr;
-                }
-                //validation
+            //setup test data
+            Employee nextMgr = new Employee() { Id = Guid.Empty };
+            for (int i = 0; i < 99; i++)
+            {
+                FakeName fname = GetAName();
+                DateTime onboardDate = DateTime.Now.AddMonths(random.Next(-100, -12));
+                DateTime recentPerfReviewDate = new DateTime(DateTime.Now.Year - 1, onboardDate.Month, 1);
+                Employee theNextMgr = EmployeeFactory.CreateEmployee(fname.FirstName, fname.LastName, (Gender)GetValue(genders), fname.Email, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), onboardDate);
+                HistoryFactory.CreateHistory(theNextMgr, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), ActionType.ANNUAL_PERFORMANCE_REVIEW, recentPerfReviewDate);
+                nextMgr = theNextMgr;
             }
         }
 
@@ -123,43 +118,6 @@ namespace PersistenceAccess.Repositories
             return enumArray.GetValue(random.Next(enumArray.Length));
         }
 
-        #endregion
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    db.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~EmployeeRepository()
-        // {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
         #endregion
     }
 }

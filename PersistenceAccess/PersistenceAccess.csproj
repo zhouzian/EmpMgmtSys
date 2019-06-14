@@ -55,6 +55,8 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Entities\Employee.cs" />
     <Compile Include="Entities\StatusChangeHistory.cs" />
+    <Compile Include="EntityToDC\Employee.cs" />
+    <Compile Include="EntityToDC\StatusChangeHistory.cs" />
     <Compile Include="Extensions\ComboxDatasourceExtension.cs" />
     <Compile Include="Extensions\EnumDisplayExtension.cs" />
     <Compile Include="Factories\EmployeeFactory.cs" />

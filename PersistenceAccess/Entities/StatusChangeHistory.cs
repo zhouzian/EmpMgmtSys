@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PersistenceAccess.Entities
 {
-	public class StatusChangeHistory
+	public partial class StatusChangeHistory
 	{
 		[BsonId]
 		[BsonField("id")]

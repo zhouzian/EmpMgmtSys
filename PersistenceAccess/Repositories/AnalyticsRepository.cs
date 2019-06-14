@@ -1,33 +1,21 @@
-﻿using LiteDB;
-using PersistenceAccess.DataContracts;
+﻿using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
+using PersistenceAccess.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace PersistenceAccess.Repositories
 {
-    public class AnalyticsRepository : IDisposable
+    public class AnalyticsRepository
     {
-        private readonly LiteDatabase db;
-
-        public AnalyticsRepository()
+        public AnalyticsDC GetAnaltyics(EmployeeRepository empRepo)
         {
-            this.db = new LiteDatabase(Constants.DB_NAME);
-        }
-
-        public AnalyticsRepository(LiteDatabase db)
-        {
-            this.db = db;
-        }
-
-        public AnalyticsDC GetAnaltyics()
-        {
-            IEnumerable<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME).FindAll();
+            IEnumerable<Employee> employees = PersistenceStore.Current.GetEmployeeStore().FindAll();
             List<EmployeeDC> source = new List<EmployeeDC>();
             foreach (var emp in employees)
             {
-                var DC = new EmployeeDC(emp, db);
+                EmployeeDC DC = emp.ConvertToDataContract(empRepo);
                 if (DC.ResignDate == null)
                 {
                     source.Add(DC);
@@ -85,42 +73,5 @@ namespace PersistenceAccess.Repositories
 
             return ret;
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    db.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~AnalyticsRepository()
-        // {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

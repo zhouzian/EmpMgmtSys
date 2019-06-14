@@ -6,7 +6,7 @@ namespace PersistenceAccess.Factories
 {
 	public class HistoryFactory
 	{
-		public static StatusChangeHistory CreateHistory(LiteDatabase db, Employee currentEmployee, Employee manager, Title title, Level level, Decimal salary, Decimal bonus, ActionType action, DateTime date)
+		public static StatusChangeHistory CreateHistory(Employee currentEmployee, Employee manager, Title title, Level level, Decimal salary, Decimal bonus, ActionType action, DateTime date)
 		{
 			if (currentEmployee.Id == Guid.Empty)
 			{
@@ -26,7 +26,7 @@ namespace PersistenceAccess.Factories
 					Bonus = bonus,
 					Action = action
 				};
-				PersistenceStore.GetHistoryStore(db).Insert(onboardHistory);
+				PersistenceStore.Current.GetHistoryStore().Insert(onboardHistory);
 				ret = onboardHistory;
 			}
 			catch (Exception ex)

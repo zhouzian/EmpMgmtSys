@@ -21,7 +21,7 @@ namespace EmployeeMgmt
 
 		private void PopulateDate()
 		{
-			AnalyticsDC result = anaRepo.GetAnaltyics();
+			AnalyticsDC result = anaRepo.GetAnaltyics(empRepo);
 			PopulateOverallSection(result);
 			PopulateDEVSection(result);
 			PopulateQASection(result);

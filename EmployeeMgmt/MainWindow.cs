@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using PersistenceAccess.Extensions;
 using PersistenceAccess.Repositories;
+using PersistenceAccess.Factories;
 
 namespace EmployeeMgmt
 {
@@ -356,5 +357,10 @@ namespace EmployeeMgmt
 					break;
 			}
 		}
-	}
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            PersistenceStore.Current.Dispose();
+        }
+    }
 }

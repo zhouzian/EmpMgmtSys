@@ -17,18 +17,6 @@
 			{
 				components.Dispose();
 			}
-            if (empRepo != null)
-            {
-                empRepo.Dispose();
-            }
-            if (anaRepo != null)
-            {
-                anaRepo.Dispose();
-            }
-            if (viewHelper != null)
-            {
-                viewHelper.Dispose();
-            }
             base.Dispose(disposing);
 		}
 

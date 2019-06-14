@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PersistenceAccess.Entities
 {
-	public class Employee
+	public partial class Employee
 	{
 		[BsonId]
 		[BsonField("id")]

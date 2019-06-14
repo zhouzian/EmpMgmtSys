@@ -6,7 +6,7 @@ namespace PersistenceAccess.Factories
 {
 	public class EmployeeFactory
 	{
-		public static Employee CreateEmployee(LiteDatabase db, string firstName, string lastName, Gender gender, string email, Employee manager, Title title, Level level, decimal salary, decimal bonus, DateTime onboardDate)
+		public static Employee CreateEmployee(string firstName, string lastName, Gender gender, string email, Employee manager, Title title, Level level, decimal salary, decimal bonus, DateTime onboardDate)
 		{
 			Employee ret = null;
 			try
@@ -19,8 +19,8 @@ namespace PersistenceAccess.Factories
 					Email = email,
 					OnboardDate = onboardDate,
 				};
-				PersistenceStore.GetEmployeeStore(db).Insert(newEmployee);
-				HistoryFactory.CreateHistory(db, newEmployee, manager, title, level, salary, bonus, ActionType.ONBOARD, newEmployee.OnboardDate);
+				PersistenceStore.Current.GetEmployeeStore().Insert(newEmployee);
+				HistoryFactory.CreateHistory(newEmployee, manager, title, level, salary, bonus, ActionType.ONBOARD, newEmployee.OnboardDate);
 				ret = newEmployee;
 			}
 			catch (Exception ex)
@@ -30,7 +30,7 @@ namespace PersistenceAccess.Factories
 			return ret;
 		}
 
-		public static void UpdateEmployeeInfo(LiteDatabase db, Employee employee, string firstName, string lastName, Gender gender, string email, DateTime onboard)
+		public static void UpdateEmployeeInfo(Employee employee, string firstName, string lastName, Gender gender, string email, DateTime onboard)
 		{
 			if (employee.Id == Guid.Empty)
 			{
@@ -43,7 +43,7 @@ namespace PersistenceAccess.Factories
 				employee.Gender = gender;
 				employee.Email = email;
 				employee.OnboardDate = onboard;
-				PersistenceStore.GetEmployeeStore(db).Update(employee);
+				PersistenceStore.Current.GetEmployeeStore().Update(employee);
 			}
 			catch(Exception ex)
 			{
