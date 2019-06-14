@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using PersistenceAccess.Entities;
+using PersistenceAccess.Extensions;
 using PersistenceAccess.Factories;
 using PersistenceAccess.Policies;
 using System;
@@ -28,7 +29,7 @@ namespace PersistenceAccess.DataContracts
 			OnboardDate = emp.OnboardDate;
 
 			// populate full history
-			var histories = Persistence.GetHistoryStore(db).Find(Query.EQ("employee_id", Id)).OrderBy(his => his.Date);
+			var histories = PersistenceStore.GetHistoryStore(db).Find(Query.EQ("employee_id", Id)).OrderBy(his => his.Date);
 			var HistoryList = new List<StatusChangeHistoryDC>();
 			foreach(var his in histories)
 			{
@@ -38,7 +39,7 @@ namespace PersistenceAccess.DataContracts
 
 			// find most recent properties including title, level, salary and manager
 			Guid managerId = History.OrderBy(his => his.Date).Last().ManagerId;
-			CurrentManager = managerId == Guid.Empty ?  new Employee() { Id = Guid.Empty } : Persistence.GetEmployeeStore(db).FindById(managerId);
+			CurrentManager = managerId == Guid.Empty ?  new Employee() { Id = Guid.Empty } : PersistenceStore.GetEmployeeStore(db).FindById(managerId);
 			CurrentTitle = History.OrderBy(his => his.Date).Last().Title;
 			CurrentLevel = History.OrderBy(his => his.Date).Last().Level;
 			CurrentSalary = History.OrderBy(his => his.Date).Last().Salary;
@@ -82,13 +83,28 @@ namespace PersistenceAccess.DataContracts
 			}
 		}
 
-		public string SelfName
+		public string FullName
 		{
 			get
 			{
 				return FirstName + " " + LastName;
 			}
 		}
+
+        public string Position
+        {
+            get
+            {
+                if (CurrentLevel == Level.NONE || CurrentLevel == Level.I || CurrentLevel == Level.II || CurrentLevel == Level.III)
+                {
+                    return CurrentTitle.GetDisplayName() + " " + CurrentLevel.GetDisplayName();
+                }
+                else
+                {
+                    return CurrentLevel.GetDisplayName() + " " + CurrentTitle.GetDisplayName();
+                }
+            }
+        }
 
 		/// <summary>
 		/// Returns the next annual performance review date. The date is populated in the constructor when an Employee object is passed in.

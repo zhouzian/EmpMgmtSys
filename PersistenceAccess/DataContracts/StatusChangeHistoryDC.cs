@@ -22,7 +22,7 @@ namespace PersistenceAccess.DataContracts
 			this.Action = his.Action;
 			if (his.ManagerId != Guid.Empty)
 			{
-				Employee manager = Persistence.GetEmployeeStore(db).FindById(his.ManagerId);
+				Employee manager = PersistenceStore.GetEmployeeStore(db).FindById(his.ManagerId);
 				ManagerName = manager.FirstName + " " + manager.LastName;
 			}
 			else

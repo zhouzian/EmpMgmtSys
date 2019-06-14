@@ -19,7 +19,7 @@ namespace PersistenceAccess.Factories
 					Email = email,
 					OnboardDate = onboardDate,
 				};
-				Persistence.GetEmployeeStore(db).Insert(newEmployee);
+				PersistenceStore.GetEmployeeStore(db).Insert(newEmployee);
 				HistoryFactory.CreateHistory(db, newEmployee, manager, title, level, salary, bonus, ActionType.ONBOARD, newEmployee.OnboardDate);
 				ret = newEmployee;
 			}
@@ -43,7 +43,7 @@ namespace PersistenceAccess.Factories
 				employee.Gender = gender;
 				employee.Email = email;
 				employee.OnboardDate = onboard;
-				Persistence.GetEmployeeStore(db).Update(employee);
+				PersistenceStore.GetEmployeeStore(db).Update(employee);
 			}
 			catch(Exception ex)
 			{

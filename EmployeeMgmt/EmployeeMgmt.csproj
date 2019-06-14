@@ -58,6 +58,7 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ManagerView.cs" />
     <Compile Include="NewEmployeeWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +73,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helper\ViewGeneratorHelper.cs" />
+    <Compile Include="Helper\VisibilityParam.cs" />
     <EmbeddedResource Include="AnalyticsWindow.resx">
       <DependentUpon>AnalyticsWindow.cs</DependentUpon>
     </EmbeddedResource>

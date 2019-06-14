@@ -19,6 +19,14 @@ namespace EmployeeMgmt
 			{
 				components.Dispose();
 			}
+            if (empRepo != null)
+            {
+                empRepo.Dispose();
+            }
+            if (viewHelper != null)
+            {
+                viewHelper.Dispose();
+            }
 			base.Dispose(disposing);
 		}
 
@@ -31,7 +39,7 @@ namespace EmployeeMgmt
 		private void InitializeComponent()
 		{
             System.Windows.Forms.ColumnHeader Name;
-            System.Windows.Forms.ColumnHeader Email;
+            System.Windows.Forms.ColumnHeader Position;
             System.Windows.Forms.ColumnHeader Onboard;
             System.Windows.Forms.Label firstNameLabel;
             System.Windows.Forms.Label lastNameLabel;
@@ -77,7 +85,7 @@ namespace EmployeeMgmt
             this.showUe = new System.Windows.Forms.CheckBox();
             this.GlobalReviewInfo = new System.Windows.Forms.Label();
             Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            Email = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            Position = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             Onboard = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             firstNameLabel = new System.Windows.Forms.Label();
             lastNameLabel = new System.Windows.Forms.Label();
@@ -98,10 +106,10 @@ namespace EmployeeMgmt
             Name.Text = "Name";
             Name.Width = 150;
             // 
-            // Email
+            // Position
             // 
-            Email.Text = "Email";
-            Email.Width = 200;
+            Position.Text = "Position";
+            Position.Width = 200;
             // 
             // Onboard
             // 
@@ -202,9 +210,9 @@ namespace EmployeeMgmt
             // 
             this.employeeListContainer.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             Name,
-            Email,
-            Onboard,
-            this.NextReview});
+            Position,
+            this.NextReview,
+            Onboard});
             this.employeeListContainer.FullRowSelect = true;
             this.employeeListContainer.HideSelection = false;
             this.employeeListContainer.LabelWrap = false;

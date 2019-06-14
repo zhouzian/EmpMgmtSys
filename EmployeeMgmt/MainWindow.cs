@@ -1,27 +1,36 @@
 ﻿using PersistenceAccess.DataContracts;
 using PersistenceAccess.Entities;
 using PersistenceAccess.Policies;
-using PersistenceAccess.View;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using PersistenceAccess.Extensions;
-using static PersistenceAccess.View.AppView;
+using PersistenceAccess.Repositories;
 
 namespace EmployeeMgmt
 {
 	public partial class MainWindow : Form
 	{
+        /// <summary>
+        /// The initializationCompleted flag is used to block all handlers execution during the window initialization process.
+        /// Without the flag, when initialization the checkboxes, the checkbox click handler will be triggered, causing unnecessary database access.
+        /// </summary>
+        private bool initializationCompleted = false;
+        private EmployeeRepository empRepo;
+        private ViewGeneratorHelper viewHelper;
 		public MainWindow()
 		{
+            empRepo = new EmployeeRepository();
+            viewHelper = new ViewGeneratorHelper(empRepo);
 			InitializeComponent();
 			InitializeState();
+            initializationCompleted = true;
 		}
 
 		private void InitializeState()
 		{
 			// Populate test data in db. Remove before release.
-			AppView.SeedDB();
+			empRepo.SeedDB();
 
 			// Render list view of all employees.
 			this.showDev.Checked = true;
@@ -31,7 +40,7 @@ namespace EmployeeMgmt
 			UpdateMainListing();
 
 			// Display policy info
-			this.GlobalReviewInfo.Text = "Incoming performance review date: " + GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate().ToShortDateString();
+			this.GlobalReviewInfo.Text = "Next performance review date: " + GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate().ToShortDateString() + '\u26a0';
 
 			// Bind enum value to dropdowns
 			this.gGender.RenderDatasource(typeof(Gender));
@@ -44,13 +53,16 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void CurrentEmployeeSelectionChangedHandler(object sender, ListViewItemSelectionChangedEventArgs e)
 		{
-			UnlockGeneralInfoSection();
-			Guid id = (Guid)e.Item.Tag;
-			EmployeeDC emp = GetEmployee(id);
-			PopulateGeneralInfoSection(emp);
-			PopulateHistorySection(emp);
-			DisableGeneralInfoBtns();
-			UnlockHistory();
+            if (initializationCompleted)
+            {
+                UnlockGeneralInfoSection();
+                Guid id = (Guid)e.Item.Tag;
+                EmployeeDC emp = empRepo.GetEmployee(id);
+                PopulateGeneralInfoSection(emp);
+                PopulateHistorySection(emp);
+                DisableGeneralInfoBtns();
+                UnlockHistory();
+            }
 		}
 
 		private void PopulateGeneralInfoSection(EmployeeDC emp)
@@ -83,7 +95,7 @@ namespace EmployeeMgmt
 		private void PopulateHistorySection(EmployeeDC emp)
 		{
 			this.historyListContainer.Items.Clear();
-			this.historyListContainer.Items.AddRange(AppView.GetHistoryFromEmployeeView(emp));
+			this.historyListContainer.Items.AddRange(viewHelper.GetHistoryFromEmployeeView(emp));
 			this.historyListContainer.Items[this.historyListContainer.Items.Count - 1].EnsureVisible();
 		}
 
@@ -94,10 +106,13 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void GeneralInfoRevertBtnClickedHandler(object sender, EventArgs e)
 		{
-			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			EmployeeDC emp = AppView.GetEmployee(id);
-			PopulateGeneralInfoSection(emp);
-			DisableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
+                EmployeeDC emp = empRepo.GetEmployee(id);
+                PopulateGeneralInfoSection(emp);
+                DisableGeneralInfoBtns();
+            }
 		}
 
 		/// <summary>
@@ -107,10 +122,13 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void GeneralInfoSaveBtnClickedHandler(object sender, EventArgs e)
 		{
-			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			Gender gender = (Gender)this.gGender.SelectedValue;
-			AppView.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
-			UpdateMainListing();
+            if (initializationCompleted)
+            {
+                Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
+                Gender gender = (Gender)this.gGender.SelectedValue;
+                empRepo.UpdateEmployeeGeneralInfo(id, this.gFirstName.Text, this.gLastName.Text, gender, this.gEmail.Text, this.gOnboard.Value);
+                UpdateMainListing();
+            }
 		}
 
 		private void UpdateMainListing()
@@ -128,7 +146,7 @@ namespace EmployeeMgmt
 				int selectedIndex = this.employeeListContainer.FocusedItem.Index;
 				Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
 				this.employeeListContainer.Items.Clear();
-				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(visibParam));
+				this.employeeListContainer.Items.AddRange(viewHelper.GetMainListView(visibParam));
 				if (selectedIndex <= this.employeeListContainer.Items.Count - 1 && (Guid)this.employeeListContainer.Items[selectedIndex].Tag == id)
 				{
 					// to make sure we are still focusing at the same item
@@ -148,7 +166,7 @@ namespace EmployeeMgmt
 			else
 			{
 				this.employeeListContainer.Items.Clear();
-				this.employeeListContainer.Items.AddRange(AppView.GetMainListView(visibParam));
+				this.employeeListContainer.Items.AddRange(viewHelper.GetMainListView(visibParam));
 				LockGeneralInfoSection();
 				DisableGeneralInfoBtns();
 				LockHistory();
@@ -209,27 +227,42 @@ namespace EmployeeMgmt
 
 		private void FirstNameModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void LastNameModifiedHander(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void EmailModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void GenderModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		private void OnboardDateModifiedHandler(object sender, EventArgs e)
 		{
-			EnableGeneralInfoBtns();
+            if (initializationCompleted)
+            {
+                EnableGeneralInfoBtns();
+            }
 		}
 
 		#endregion
@@ -241,16 +274,19 @@ namespace EmployeeMgmt
 		/// <param name="e"></param>
 		private void NewEmployeeBtnClickedHandler(object sender, EventArgs e)
 		{
-			using (var newEmpDlg = new NewEmployeeWindow())
-			{
-				if (newEmpDlg.ShowDialog() == DialogResult.OK)
-				{
-					EnsureChecked(newEmpDlg.newEmployeeTitle);
-					UpdateMainListing();
-					Guid tmp = newEmpDlg.newEmployeeId;
-					SelectEmployee(tmp.ToString());
-				}
-			}
+            if (initializationCompleted)
+            {
+                using (var newEmpDlg = new NewEmployeeWindow())
+                {
+                    if (newEmpDlg.ShowDialog() == DialogResult.OK)
+                    {
+                        EnsureChecked(newEmpDlg.newEmployeeTitle);
+                        UpdateMainListing();
+                        Guid tmp = newEmpDlg.newEmployeeId;
+                        SelectEmployee(tmp.ToString());
+                    }
+                }
+            }
 		}
 
 		private void SelectEmployee(string id)
@@ -263,31 +299,40 @@ namespace EmployeeMgmt
 
 		private void CreateHistoryBtnClickedHandler(object sender, EventArgs e)
 		{
-			Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
-			EmployeeDC emp = AppView.GetEmployee((Guid)id);
-			using (var newHistoryDlg = new NewHistoryWindow(emp))
-			{
-				if (newHistoryDlg.ShowDialog() == DialogResult.OK)
-				{
-					EnsureChecked(newHistoryDlg.currentEmployeeTitle);
-					UpdateMainListing();
-					Guid tmp = newHistoryDlg.currentEmployeeId;
-					SelectEmployee(tmp.ToString());
-				}
-			}
+            if (initializationCompleted)
+            {
+                Guid id = (Guid)this.employeeListContainer.FocusedItem.Tag;
+                EmployeeDC emp = empRepo.GetEmployee((Guid)id);
+                using (var newHistoryDlg = new NewHistoryWindow(emp))
+                {
+                    if (newHistoryDlg.ShowDialog() == DialogResult.OK)
+                    {
+                        EnsureChecked(newHistoryDlg.currentEmployeeTitle);
+                        UpdateMainListing();
+                        Guid tmp = newHistoryDlg.currentEmployeeId;
+                        SelectEmployee(tmp.ToString());
+                    }
+                }
+            }
 		}
 
 		private void AnalyticsBtnClickedHandler(object sender, EventArgs e)
 		{
-			using (var analyticsDlg = new AnalyticsWindow())
-			{
-				analyticsDlg.ShowDialog();
-			}
+            if (initializationCompleted)
+            {
+                using (var analyticsDlg = new AnalyticsWindow())
+                {
+                    analyticsDlg.ShowDialog();
+                }
+            }
 		}
 
 		private void CatelogChangedHandler(object sender, EventArgs e)
 		{
-			UpdateMainListing();
+            if (initializationCompleted)
+            {
+                UpdateMainListing();
+            }
 		}
 
 		private void EnsureChecked(Title title)
