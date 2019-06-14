@@ -540,8 +540,10 @@ namespace EmployeeMgmt
             this.Controls.Add(this.newEmpBtn);
             this.Controls.Add(this.generalInfoContainer);
             this.Controls.Add(this.employeeListContainer);
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Padding = new System.Windows.Forms.Padding(3);
+            this.ShowIcon = false;
             this.Text = "Employee Management System";
             this.generalInfoContainer.ResumeLayout(false);
             this.generalInfoContainer.PerformLayout();
