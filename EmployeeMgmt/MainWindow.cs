@@ -40,7 +40,7 @@ namespace EmployeeMgmt
 			UpdateMainListing();
 
 			// Display policy info
-			this.GlobalReviewInfo.Text = "Incoming performance review date: " + GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate().ToShortDateString();
+			this.GlobalReviewInfo.Text = "Next performance review date: " + GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate().ToShortDateString() + '\u26a0';
 
 			// Bind enum value to dropdowns
 			this.gGender.RenderDatasource(typeof(Gender));

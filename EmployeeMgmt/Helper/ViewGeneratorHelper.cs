@@ -27,14 +27,14 @@ namespace EmployeeMgmt
             List<ListViewItem> ret = new List<ListViewItem>();
             foreach (var empDC in allEmp)
             {
-                var subItems = new string[] { empDC.SelfName, empDC.Email, empDC.OnboardDate.ToShortDateString(), empDC.NextReviewDate?.ToShortDateString() };
+                var subItems = new string[] { empDC.FullName, empDC.Position, empDC.NextReviewDate?.ToShortDateString(), empDC.OnboardDate.ToShortDateString() };
                 if (empDC.ResignDate != null)
                 {
                     subItems[0] = subItems[0] + " (Resigned)";
                 }
                 else if (empDC.NextReviewDate == GlobalPolicyContainer.AnnualPerformanceReviewPolicy.GetNextReviewDate())
                 {
-                    subItems[3] = '\u26a0' + " " + subItems[3];
+                    subItems[2] = subItems[2] + " " + '\u26a0';
                 }
                 var item = new ListViewItem(subItems);
                 if (empDC.ResignDate != null)

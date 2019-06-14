@@ -148,7 +148,7 @@ namespace PersistenceAccess.Policies
 					break;
 			}
 
-			return new DateTime(reviewYear, reviewMonth, 1);
+            return new DateTime(reviewYear, reviewMonth, 1);
 		}
 	}
 }

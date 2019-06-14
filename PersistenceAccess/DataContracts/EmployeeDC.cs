@@ -1,5 +1,6 @@
 ﻿using LiteDB;
 using PersistenceAccess.Entities;
+using PersistenceAccess.Extensions;
 using PersistenceAccess.Factories;
 using PersistenceAccess.Policies;
 using System;
@@ -82,13 +83,28 @@ namespace PersistenceAccess.DataContracts
 			}
 		}
 
-		public string SelfName
+		public string FullName
 		{
 			get
 			{
 				return FirstName + " " + LastName;
 			}
 		}
+
+        public string Position
+        {
+            get
+            {
+                if (CurrentLevel == Level.NONE || CurrentLevel == Level.I || CurrentLevel == Level.II || CurrentLevel == Level.III)
+                {
+                    return CurrentTitle.GetDisplayName() + " " + CurrentLevel.GetDisplayName();
+                }
+                else
+                {
+                    return CurrentLevel.GetDisplayName() + " " + CurrentTitle.GetDisplayName();
+                }
+            }
+        }
 
 		/// <summary>
 		/// Returns the next annual performance review date. The date is populated in the constructor when an Employee object is passed in.

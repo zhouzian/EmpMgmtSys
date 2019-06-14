@@ -24,13 +24,13 @@ namespace PersistenceAccess.Repositories
 
         public IEnumerable<EmployeeDC> GetAllEmployees()
         {
-            IEnumerable<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME).FindAll().OrderBy(emp => emp.OnboardDate);
+            IEnumerable<Employee> employees = db.GetCollection<Employee>(Constants.EMPLOYEE_COLLECTION_NAME).FindAll();
             var ret = new List<EmployeeDC>();
             foreach(Employee emp in employees)
             {
                 ret.Add(new EmployeeDC(emp, db));
             }
-            return ret;
+            return ret.OrderBy(emp => emp.NextReviewDate).ThenBy(emp => emp.OnboardDate);
         }
 
         public IEnumerable<Employee> GetAllEmployeesRaw()
@@ -88,8 +88,10 @@ namespace PersistenceAccess.Repositories
                 for (int i = 0; i < 99; i++)
                 {
                     FakeName fname = GetAName();
-                    Employee theNextMgr = EmployeeFactory.CreateEmployee(db, fname.FirstName, fname.LastName, (Gender)GetValue(genders), fname.Email, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), DateTime.Now.AddMonths(-3));
-                    HistoryFactory.CreateHistory(db, theNextMgr, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), ActionType.ANNUAL_PERFORMANCE_REVIEW, DateTime.Now);
+                    DateTime onboardDate = DateTime.Now.AddMonths(random.Next(-100, -12));
+                    DateTime recentPerfReviewDate = new DateTime(DateTime.Now.Year - 1, onboardDate.Month, 1);
+                    Employee theNextMgr = EmployeeFactory.CreateEmployee(db, fname.FirstName, fname.LastName, (Gender)GetValue(genders), fname.Email, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), onboardDate);
+                    HistoryFactory.CreateHistory(db, theNextMgr, nextMgr, (Title)GetValue(titles), (Level)GetValue(levels), random.Next(50000, 200000), random.Next(0, 10000), ActionType.ANNUAL_PERFORMANCE_REVIEW, recentPerfReviewDate);
                     nextMgr = theNextMgr;
                 }
                 //validation
